@@ -11,13 +11,7 @@ let countInputTimer = null;
 window.currentProduct = localStorage.getItem('product') || '';
 window.productsList = {}; // 🆕 ДЛЯ ХРАНЕНИЯ ПРОДУКТОВ: {id: name}
 // --- КОНСТАНТЫ И НАСТРОЙКИ ---
-const VALID_WO_PREFIX = 'WO';
-const SCAN_TIMEOUT_MS = 400; 
-// === КОНФИГУРАЦИЯ ФИНАЛЬНЫХ ОПЕРАЦИЙ ===
-const FINAL_OPERATIONS = {
-  'SC1A208': 'VC3 + Packing',
-  'SM2A253': 'Test'
-};
+const SCAN_TIMEOUT_MS = 400;
 let currentLang = localStorage.getItem('currentLang') || 'ru';
 let scanTimer = null; 
 let isPaused = false;
@@ -28,17 +22,6 @@ console.log('🔧 Current GlobalState:', debugState);
 console.log('🚀 app.js loaded - currentLang:', currentLang);
 console.log('🔍 localStorage currentLang:', localStorage.getItem('currentLang'));
 console.log('🌐 translations.js loaded:', typeof getTranslation);
-
-function initializeAppState() {
-    // 🔒 Отключено. Состояние не должно изменяться при загрузке страницы.
-    return;
-}
-// 🔥 ГЛОБАЛЬНАЯ ПРОВЕРКА И СИНХРОНИЗАЦИИ ЯЗЫКА — ОТКЛЮЧЕНА
-function syncLanguageAcrossPages() {
-    // Логика синхронизации отключена — язык применяется только при загрузке страницы.
-    return;
-}
-
 
 function selectProduct() {
     const select = document.getElementById('product-select');
@@ -553,20 +536,7 @@ function updateUI() {
         serialInput.placeholder = getTranslation('placeholder_sn');
     }
 
-    // Обновление плейсхолдеров
-    if (getElement('serial-input')) {
-        getElement('serial-input').placeholder = getTranslation('placeholder_sn');
-        getElement('serial-input').value = '';
-    }
-	// 🔒 УПРАВЛЕНИЕ КНОПКОЙ LOGOUT
-	if (logoutBtn) {
-		// Разрешено НИКОГДА НЕ заниматься логикой тут, только отображение:
-		logoutBtn.disabled = (isWorking === true || isWorking === false);
-		logoutBtn.style.opacity = logoutBtn.disabled ? '0.6' : '1';
-	}
 
-
-    
 }
 async function fetchOperatorSummary(operatorId) {
   try {
@@ -1352,31 +1322,6 @@ function updateVisualControlButton() {
 
 
 
-// === Загрузка операторов из базы ===
-async function loadOperators() {
-  try {
-    console.log('🔍 loadOperators() called');
-    const res = await fetch('/api/operators');
-    const data = await res.json();
-    console.log('📦 Operators from API:', data);
-
-    const select = document.getElementById('operator-select');
-    if (!select) return;
-
-    // Перезаполняем список операторов
-    select.innerHTML = '<option value=""></option>';
-    data.forEach(op => {
-      const option = document.createElement('option');
-      option.value = op.operator_id;
-      option.textContent = op.operator_name;
-      select.appendChild(option);
-    });
-  } catch (err) {
-    console.error('Error loading operators:', err);
-  }
-}
-
-
 
 
 
@@ -1667,39 +1612,6 @@ async function initDefectsPage() {
     updateDefectsPage();
 }
 
-/**
- * Загрузка продуктов специально для страницы дефектов
- */
-async function loadProductsForDefects() {
-    try {
-        console.log('🔄 Загрузка продуктов для страницы дефектов...');
-        const response = await fetch('/api/products');
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const products = await response.json();
-        console.log('📦 Products loaded for defects page:', products);
-        
-        // Сохраняем список продуктов
-        window.productsList = {};
-        products.forEach(product => {
-            window.productsList[product.product_id] = product.product_name || product.product_id;
-        });
-        
-        console.log('✅ Products list updated:', window.productsList);
-        
-    } catch (err) {
-        console.error('❌ Error loading products for defects page:', err);
-        // Создаем тестовые данные если API недоступно
-        window.productsList = {
-            'TEST001': 'Test Product 1',
-            'TEST002': 'Test Product 2'
-        };
-    }
-}
-
 // 🔧 ФУНКЦИЯ ОБНОВЛЕНИЯ СТРАНИЦЫ ДЕФЕКТОВ
 function updateDefectsPage() {
     const state = getGlobalState();
@@ -1957,62 +1869,7 @@ window.filterOperationsByProduct = function() {
 	} else {
 	  console.error('❌ filterWorkOrdersByProduct НЕ НАЙДЕНА!');
 	}
-};	
-function confirmSelection() {
-    const operator = document.getElementById('operator-select')?.value;
-    const operation = document.getElementById('operation-select')?.value;
-    const wo = document.getElementById('wo-input')?.value?.trim();
-
-    if (!operator || !operation || !wo) {
-        showToast(getTranslation('error_fill_all_fields'), 'error');
-        return;
-    }
-
-    // Сохраняем состояние авторизации
-    setGlobalState({
-        operatorId: operator,
-        operation_id: operation,
-        wo: wo,
-        isAuthorized: true,
-        isWorking: null
-    });
-
-    window.location.href = 'index.html';
-}
-	
-
-function loadInitialState() {
-    const state = getGlobalState();
-    
-    console.log('🔍 RAW GlobalState:', state);
-    
-    // Восстанавливаем базовые данные
-    currentProduct = state.product || null;
-    currentOperator = state.operatorId || state.operator || null;
-    currentOperation = state.operation_id || null;
-    currentWO = state.wo || null;
-    
-    // 🔥 ИСПРАВЛЕНИЕ: Разделяем авторизацию и готовность к работе
-    // Авторизован - когда есть оператор
-    // Готов к работе - когда есть оператор + станция + WO
-    isAuthorized = !!currentOperator; // 🔥 ТОЛЬКО оператор!
-    
-    // Операция не начата
-    isWorking = null;
-    
-    console.log('🔄 Восстановлено состояние:', {
-        product: currentProduct,
-        operator: currentOperator,
-        operation: currentOperation,
-        wo: currentWO,
-        isAuthorized: isAuthorized,
-        isWorking: isWorking
-    });
-    
-    if (currentOperator) {
-        currentOperatorSummary = [];
-    }
-}
+};
 
 window.filterWorkOrdersByProduct = function(selectedProductId) {
   console.log('🔥 NEW filterWorkOrdersByProduct CALLED', selectedProductId);
@@ -2158,9 +2015,3 @@ document.getElementById("vc-btn")?.addEventListener("click", () => {
     window.location.href = "visual_check.html";
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const confirmBtn = document.getElementById('confirm-btn');
-    if (confirmBtn) {
-        confirmBtn.addEventListener('click', confirmSelection);
-    }
-});
