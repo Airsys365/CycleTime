@@ -209,28 +209,11 @@ db.serialize(() => {
 
 
 
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS logs (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      timestamp TEXT,
-      type TEXT,
-      operator TEXT,
-      station TEXT,
-      wo TEXT,
-      data TEXT
-    )
-  `);
-});
-
 function normalizeSN(sn) {
     if (!sn) return null;
     // Очистка: удаляем "S/N:", пробелы, приводим к верхнему регистру
     return sn.toString().replace(/S\/N[:\s]*/i, "").trim().toUpperCase();
 }
-
-// --- API для логирования событий ---
-let logs = [];
 
 // --- API для логирования событий ---
 app.post('/api/log', (req, res) => {
@@ -248,7 +231,7 @@ app.post('/api/log', (req, res) => {
 
   // --- 1) Пишем в лог (технический) ---
   db.run(
-    `INSERT INTO logs (timestamp, type, operator, operation_id, wo, data)
+    `INSERT INTO logs (timestamp, type, operator, station, wo, data)
      VALUES (?, ?, ?, ?, ?, ?)`,
     [
       entry.timestamp,
@@ -431,8 +414,17 @@ app.get("/api/admin/get_tables", (req, res) => {
 app.post("/api/admin/import_excel", (req, res) => {
     const { table, rows } = req.body;
 
+    const ALLOWED_TABLES = [
+        'operators', 'operations', 'downtime_reasons', 'components',
+        'defects', 'products', 'defect_journal', 'work_orders_plan'
+    ];
+
     if (!table || !rows || !Array.isArray(rows)) {
         return res.json({ status: "error", error: "Invalid payload" });
+    }
+
+    if (!ALLOWED_TABLES.includes(table)) {
+        return res.json({ status: "error", error: `Table "${table}" is not allowed for import` });
     }
 
     if (rows.length === 0) {
@@ -1138,7 +1130,7 @@ app.post('/api/update_status', (req, res) => {
               } else {
                 console.log(`✅ Fallback обновление: ${this.changes} строк`);
               }
-              res.json({ success: true, changes: this.changes + this.changes });
+              res.json({ success: true, changes: this.changes });
             }
           );
         } else {
