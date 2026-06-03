@@ -415,7 +415,31 @@ app.get('/api/debug/operator/:id', (req, res) => {
         [opId],
         (err2, recent) => {
           if (err2) return res.status(500).json({ error: err2.message });
-          res.json({ operator_id: opId, summary: rows, recent_rows: recent });
+          // Also find which operator_ids have records today (in case records stored under wrong id)
+          db.all(
+            `SELECT operator_id, COUNT(*) as cnt FROM journal
+             WHERE date(timestamp) = date('now')
+             GROUP BY operator_id ORDER BY cnt DESC LIMIT 20`,
+            [],
+            (err3, today) => {
+              // Find records with empty/null operator_id (common bug)
+              db.all(
+                `SELECT journal_id, timestamp, event_type, operation_id, work_order_id, operator_id
+                 FROM journal WHERE (operator_id IS NULL OR operator_id = '')
+                 ORDER BY journal_id DESC LIMIT 10`,
+                [],
+                (err4, nullOp) => {
+                  res.json({
+                    operator_id: opId,
+                    summary: rows,
+                    recent_rows: recent,
+                    todays_operators: today || [],
+                    null_operator_rows: nullOp || []
+                  });
+                }
+              );
+            }
+          );
         }
       );
     }
