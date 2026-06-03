@@ -1048,6 +1048,74 @@ app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
 
+// === Авто-завершение забытых операций в конце смены ===
+
+function autoCloseActiveSessions(label) {
+  const endTime = getLocalTimestamp();
+
+  db.all(
+    `SELECT DISTINCT operator_id, operation_id, work_order_id
+     FROM journal
+     WHERE is_active = 1 AND status IN ('active', 'paused')`,
+    [],
+    (err, rows) => {
+      if (err) {
+        console.error('[AutoClose] Ошибка запроса активных сессий:', err.message);
+        return;
+      }
+      if (!rows || rows.length === 0) {
+        console.log(`[AutoClose] ${label}: нет активных сессий`);
+        return;
+      }
+
+      console.log(`[AutoClose] ${label}: закрываем ${rows.length} сессий`);
+
+      rows.forEach(row => {
+        // Вставляем END_OP_SESSION чтобы cycle-time считался корректно
+        db.run(
+          `INSERT INTO journal (timestamp, operator_id, operation_id, event_type, work_order_id, end_time, status, is_active)
+           VALUES (?, ?, ?, 'END_OP_SESSION', ?, ?, 'finished', 0)`,
+          [endTime, row.operator_id, row.operation_id, row.work_order_id, endTime]
+        );
+
+        // Закрываем все активные строки этой сессии
+        db.run(
+          `UPDATE journal SET is_active = 0, status = 'finished', end_time = ?
+           WHERE operator_id = ? AND work_order_id = ? AND status IN ('active', 'paused')`,
+          [endTime, row.operator_id, row.work_order_id]
+        );
+
+        console.log(`[AutoClose] закрыта: ${row.operator_id} / ${row.operation_id} / ${row.work_order_id}`);
+      });
+
+      // Записываем в технический лог
+      db.run(
+        `INSERT INTO logs (timestamp, type, operator, station, wo, data)
+         VALUES (?, 'AUTO_CLOSE', 'system', 'system', 'all', ?)`,
+        [endTime, JSON.stringify({ label, sessions: rows.length })]
+      );
+    }
+  );
+}
+
+let lastAutoCloseKey = null;
+
+setInterval(() => {
+  const now = new Date();
+  const hh = now.getHours();
+  const mm = now.getMinutes();
+
+  const isShiftEnd = (hh === 14 && mm === 30) || (hh === 22 && mm === 30);
+  if (!isShiftEnd) return;
+
+  // Защита от двойного срабатывания в одну минуту
+  const key = `${now.toDateString()}_${hh}:${mm}`;
+  if (lastAutoCloseKey === key) return;
+  lastAutoCloseKey = key;
+
+  autoCloseActiveSessions(`shift_end_${hh}:${mm}`);
+}, 60 * 1000);
+
 // --- API для продуктов ---
 app.get('/api/products', (req, res) => {
   console.log('📦 GET /api/products called');
