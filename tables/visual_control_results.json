@@ -1,0 +1,1034 @@
+[
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 1,
+        "record_id": 1,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 2,
+        "record_id": 1,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 3,
+        "record_id": 1,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 4,
+        "record_id": 1,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 5,
+        "record_id": 1,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 6,
+        "record_id": 1,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 7,
+        "record_id": 1,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 8,
+        "record_id": 2,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 9,
+        "record_id": 2,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 10,
+        "record_id": 2,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 11,
+        "record_id": 2,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 12,
+        "record_id": 2,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 13,
+        "record_id": 2,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 14,
+        "record_id": 2,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 15,
+        "record_id": 3,
+        "status": 0
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 16,
+        "record_id": 3,
+        "status": 0
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 17,
+        "record_id": 3,
+        "status": 0
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 18,
+        "record_id": 3,
+        "status": 0
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 19,
+        "record_id": 3,
+        "status": 0
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 20,
+        "record_id": 3,
+        "status": 0
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 21,
+        "record_id": 3,
+        "status": 0
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 22,
+        "record_id": 4,
+        "status": 0
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 23,
+        "record_id": 4,
+        "status": 0
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 24,
+        "record_id": 4,
+        "status": 0
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 25,
+        "record_id": 4,
+        "status": 0
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 26,
+        "record_id": 4,
+        "status": 0
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 27,
+        "record_id": 4,
+        "status": 0
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 28,
+        "record_id": 4,
+        "status": 0
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 29,
+        "record_id": 5,
+        "status": 0
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 30,
+        "record_id": 5,
+        "status": 0
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 31,
+        "record_id": 5,
+        "status": 0
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 32,
+        "record_id": 5,
+        "status": 0
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 33,
+        "record_id": 5,
+        "status": 0
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 34,
+        "record_id": 5,
+        "status": 0
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 35,
+        "record_id": 5,
+        "status": 0
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 36,
+        "record_id": 6,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 37,
+        "record_id": 6,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 38,
+        "record_id": 6,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 39,
+        "record_id": 6,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 40,
+        "record_id": 6,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 41,
+        "record_id": 6,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 42,
+        "record_id": 6,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 43,
+        "record_id": 7,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 44,
+        "record_id": 7,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 45,
+        "record_id": 7,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 46,
+        "record_id": 7,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 47,
+        "record_id": 7,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 48,
+        "record_id": 7,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 49,
+        "record_id": 7,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 50,
+        "record_id": 8,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 51,
+        "record_id": 8,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 52,
+        "record_id": 8,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 53,
+        "record_id": 8,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 54,
+        "record_id": 8,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 55,
+        "record_id": 8,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 56,
+        "record_id": 8,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 57,
+        "record_id": 9,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 58,
+        "record_id": 9,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 59,
+        "record_id": 9,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 60,
+        "record_id": 9,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 61,
+        "record_id": 9,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 62,
+        "record_id": 9,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 63,
+        "record_id": 9,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 64,
+        "record_id": 10,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 65,
+        "record_id": 10,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 66,
+        "record_id": 10,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 67,
+        "record_id": 10,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 68,
+        "record_id": 10,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 69,
+        "record_id": 10,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 70,
+        "record_id": 10,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 71,
+        "record_id": 11,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 72,
+        "record_id": 11,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 73,
+        "record_id": 11,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 74,
+        "record_id": 11,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 75,
+        "record_id": 11,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 76,
+        "record_id": 11,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 77,
+        "record_id": 11,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 78,
+        "record_id": 12,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 79,
+        "record_id": 12,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 80,
+        "record_id": 12,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 81,
+        "record_id": 12,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 82,
+        "record_id": 12,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 83,
+        "record_id": 12,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 84,
+        "record_id": 12,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 85,
+        "record_id": 13,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 86,
+        "record_id": 13,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 87,
+        "record_id": 13,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 88,
+        "record_id": 13,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 89,
+        "record_id": 13,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 90,
+        "record_id": 13,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 91,
+        "record_id": 13,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 92,
+        "record_id": 14,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 93,
+        "record_id": 14,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 94,
+        "record_id": 14,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 95,
+        "record_id": 14,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 96,
+        "record_id": 14,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 97,
+        "record_id": 14,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 98,
+        "record_id": 14,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 99,
+        "record_id": 15,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 100,
+        "record_id": 15,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 101,
+        "record_id": 15,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 102,
+        "record_id": 15,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 103,
+        "record_id": 15,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 104,
+        "record_id": 15,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 105,
+        "record_id": 15,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 106,
+        "record_id": 16,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 107,
+        "record_id": 16,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 108,
+        "record_id": 16,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 109,
+        "record_id": 16,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 110,
+        "record_id": 16,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 111,
+        "record_id": 16,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 112,
+        "record_id": 16,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 113,
+        "record_id": 17,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 114,
+        "record_id": 17,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 115,
+        "record_id": 17,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 116,
+        "record_id": 17,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 117,
+        "record_id": 17,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 118,
+        "record_id": 17,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 119,
+        "record_id": 17,
+        "status": 1
+    },
+    {
+        "criterion_text": "Correct labels",
+        "id": 120,
+        "record_id": 18,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damaged cables",
+        "id": 121,
+        "record_id": 18,
+        "status": 1
+    },
+    {
+        "criterion_text": "Correct housing and black cable assembly",
+        "id": 122,
+        "record_id": 18,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 123,
+        "record_id": 19,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 124,
+        "record_id": 19,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 125,
+        "record_id": 19,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 126,
+        "record_id": 19,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 127,
+        "record_id": 19,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 128,
+        "record_id": 19,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 129,
+        "record_id": 19,
+        "status": 1
+    },
+    {
+        "criterion_text": "Correct labels",
+        "id": 130,
+        "record_id": 20,
+        "status": 0
+    },
+    {
+        "criterion_text": "No damaged cables",
+        "id": 131,
+        "record_id": 20,
+        "status": 0
+    },
+    {
+        "criterion_text": "Correct housing and black cable assembly",
+        "id": 132,
+        "record_id": 20,
+        "status": 0
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 133,
+        "record_id": 21,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 134,
+        "record_id": 21,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 135,
+        "record_id": 21,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 136,
+        "record_id": 21,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 137,
+        "record_id": 21,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 138,
+        "record_id": 21,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 139,
+        "record_id": 21,
+        "status": 1
+    },
+    {
+        "criterion_text": "SCREWS: 2 side screws mounted, 1 lid screw mounted",
+        "id": 140,
+        "record_id": 22,
+        "status": 0
+    },
+    {
+        "criterion_text": "LABELS: No damages, text fully printed, QR code readable",
+        "id": 141,
+        "record_id": 22,
+        "status": 0
+    },
+    {
+        "criterion_text": "WIRES: No damages",
+        "id": 142,
+        "record_id": 22,
+        "status": 0
+    },
+    {
+        "criterion_text": "HOUSING: No mechanical damage, no casting defects",
+        "id": 143,
+        "record_id": 22,
+        "status": 0
+    },
+    {
+        "criterion_text": "ASSEMBLY: Optics aligned, lid assembled correctly, rubber plug installed",
+        "id": 144,
+        "record_id": 22,
+        "status": 0
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 145,
+        "record_id": 23,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 146,
+        "record_id": 23,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 147,
+        "record_id": 23,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 148,
+        "record_id": 23,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 149,
+        "record_id": 23,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 150,
+        "record_id": 23,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 151,
+        "record_id": 23,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 152,
+        "record_id": 24,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 153,
+        "record_id": 24,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 154,
+        "record_id": 24,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 155,
+        "record_id": 24,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 156,
+        "record_id": 24,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 157,
+        "record_id": 24,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 158,
+        "record_id": 24,
+        "status": 1
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 159,
+        "record_id": 25,
+        "status": 0
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 160,
+        "record_id": 25,
+        "status": 0
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 161,
+        "record_id": 25,
+        "status": 0
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 162,
+        "record_id": 25,
+        "status": 0
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 163,
+        "record_id": 25,
+        "status": 0
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 164,
+        "record_id": 25,
+        "status": 0
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 165,
+        "record_id": 25,
+        "status": 0
+    },
+    {
+        "criterion_text": "Nominals C8/C10 correct (С8 = 1n5; C10 = according to specs)",
+        "id": 166,
+        "record_id": 26,
+        "status": 1
+    },
+    {
+        "criterion_text": "No solder resist material",
+        "id": 167,
+        "record_id": 26,
+        "status": 1
+    },
+    {
+        "criterion_text": "Black, white and red cables correct position",
+        "id": 168,
+        "record_id": 26,
+        "status": 1
+    },
+    {
+        "criterion_text": "No damages of components, hybrids and main board",
+        "id": 169,
+        "record_id": 26,
+        "status": 1
+    },
+    {
+        "criterion_text": "All pins of ceramic boards are assembled into holes",
+        "id": 170,
+        "record_id": 26,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness and correct lacquering surface",
+        "id": 171,
+        "record_id": 26,
+        "status": 1
+    },
+    {
+        "criterion_text": "Cleanliness inside optics",
+        "id": 172,
+        "record_id": 26,
+        "status": 1
+    }
+]

@@ -1,0 +1,290 @@
+[
+    {
+        "defect_description_en": "Bridging/Solder bridge",
+        "defect_description_et": "Joodesild / Lühis",
+        "defect_description_ru": "Перемычка из припоя",
+        "defect_id": 501
+    },
+    {
+        "defect_description_en": "Solder fillet/Absence",
+        "defect_description_et": "Joodimenisk / Puudub",
+        "defect_description_ru": "Отсутствие мениска припоя",
+        "defect_id": 502
+    },
+    {
+        "defect_description_en": "Not enough solder paste",
+        "defect_description_et": "Ebapiisav joodipasta",
+        "defect_description_ru": "Недостаточно паяльной пасты",
+        "defect_id": 503
+    },
+    {
+        "defect_description_en": "Excessive solder",
+        "defect_description_et": "Liigne joodis",
+        "defect_description_ru": "Избыточное количество припоя",
+        "defect_id": 504
+    },
+    {
+        "defect_description_en": "Solder residue ",
+        "defect_description_et": "Joodijäägid",
+        "defect_description_ru": "Остатки припоя",
+        "defect_id": 505
+    },
+    {
+        "defect_description_en": "Solder balls",
+        "defect_description_et": "Joodikuulid",
+        "defect_description_ru": "Шарики припоя",
+        "defect_id": 506
+    },
+    {
+        "defect_description_en": "Holes in the solder",
+        "defect_description_et": "Augud joodises",
+        "defect_description_ru": "Отверстия в припое",
+        "defect_id": 507
+    },
+    {
+        "defect_description_en": "Wrong component",
+        "defect_description_et": "Vale komponent ",
+        "defect_description_ru": "Неправильный компонент",
+        "defect_id": 508
+    },
+    {
+        "defect_description_en": "Component lead in the air",
+        "defect_description_et": "Komponendi jalg õhus",
+        "defect_description_ru": "Вывод компонента в воздухе",
+        "defect_id": 509
+    },
+    {
+        "defect_description_en": "Misplacement ",
+        "defect_description_et": "Nihkumine ",
+        "defect_description_ru": "Смещение ",
+        "defect_id": 510
+    },
+    {
+        "defect_description_en": "Polarity",
+        "defect_description_et": "Polaarsus",
+        "defect_description_ru": "Полярность",
+        "defect_id": 511
+    },
+    {
+        "defect_description_en": "Upsidedown",
+        "defect_description_et": "Tagurpidi ",
+        "defect_description_ru": "Перевёрнут ",
+        "defect_id": 512
+    },
+    {
+        "defect_description_en": "Missing ",
+        "defect_description_et": "Puuduv ",
+        "defect_description_ru": "Отсутствует ",
+        "defect_id": 513
+    },
+    {
+        "defect_description_en": "Lifted up",
+        "defect_description_et": "Tõstetud ",
+        "defect_description_ru": "Поднятие ",
+        "defect_id": 514
+    },
+    {
+        "defect_description_en": "Foreign",
+        "defect_description_et": "Võõrkeha",
+        "defect_description_ru": "Посторонний объект",
+        "defect_id": 515
+    },
+    {
+        "defect_description_en": "Damaged",
+        "defect_description_et": "Vigastatud ",
+        "defect_description_ru": "Поврежден",
+        "defect_id": 516
+    },
+    {
+        "defect_description_en": "Contamination",
+        "defect_description_et": "Saastumine",
+        "defect_description_ru": "Загрязнение",
+        "defect_id": 517
+    },
+    {
+        "defect_description_en": "Burned component",
+        "defect_description_et": "Põlenud komponent",
+        "defect_description_ru": "Сгоревший компонент",
+        "defect_id": 518
+    },
+    {
+        "defect_description_en": "Other ",
+        "defect_description_et": "Muu ",
+        "defect_description_ru": "Другое ",
+        "defect_id": 519
+    },
+    {
+        "defect_description_en": "Went to repair",
+        "defect_description_et": "Remondi",
+        "defect_description_ru": "Ушло в ремонт",
+        "defect_id": 520
+    },
+    {
+        "defect_description_en": "Button not working",
+        "defect_description_et": "Nupp ei tööta",
+        "defect_description_ru": "Не работает кнопка",
+        "defect_id": 521
+    },
+    {
+        "defect_description_en": "Low bat",
+        "defect_description_et": "Madal pinge",
+        "defect_description_ru": "Низкое напряжение",
+        "defect_id": 522
+    },
+    {
+        "defect_description_en": "Unreadable text",
+        "defect_description_et": "Loetamatu tekst",
+        "defect_description_ru": "Нечитаемый текст",
+        "defect_id": 523
+    },
+    {
+        "defect_description_en": "Blurry display ",
+        "defect_description_et": "Udune ekraan",
+        "defect_description_ru": "Не чёткий дисплей",
+        "defect_id": 524
+    },
+    {
+        "defect_description_en": "White display",
+        "defect_description_et": "Valge ekraan",
+        "defect_description_ru": "Белый дисплей",
+        "defect_id": 525
+    },
+    {
+        "defect_description_en": "FW Error",
+        "defect_description_et": "Püsivara viga",
+        "defect_description_ru": "Ошибка FW",
+        "defect_id": 526
+    },
+    {
+        "defect_description_en": "Temperature Error",
+        "defect_description_et": "Temperatuuri viga",
+        "defect_description_ru": "Ошибка температуры",
+        "defect_id": 527
+    },
+    {
+        "defect_description_en": "Detector Error",
+        "defect_description_et": "Detektori viga",
+        "defect_description_ru": "Ошибка детектора",
+        "defect_id": 528
+    },
+    {
+        "defect_description_en": "Other exceptions",
+        "defect_description_et": "Muud erandid",
+        "defect_description_ru": "Прочие исключения.",
+        "defect_id": 529
+    },
+    {
+        "defect_description_en": "Test defect",
+        "defect_description_et": "Test defekt",
+        "defect_description_ru": "Тестовый дефект",
+        "defect_id": 530
+    },
+    {
+        "defect_description_en": "Неправильная версия",
+        "defect_description_et": "Vale versioon",
+        "defect_description_ru": "Wrong FW",
+        "defect_id": 531
+    },
+    {
+        "defect_description_en": "Нет соединения",
+        "defect_description_et": "Ei ole uhendust",
+        "defect_description_ru": "No communication",
+        "defect_id": 532
+    },
+    {
+        "defect_description_en": "RP-time",
+        "defect_description_et": "RP-time",
+        "defect_description_ru": "RP-time",
+        "defect_id": 533
+    },
+    {
+        "defect_description_en": "RP-level",
+        "defect_description_et": "RP-level",
+        "defect_description_ru": "RP-level",
+        "defect_id": 599
+    },
+    {
+        "defect_description_en": "PF-level",
+        "defect_description_et": "PF-level",
+        "defect_description_ru": "PF-level",
+        "defect_id": 600
+    },
+    {
+        "defect_description_en": "Gate Pulse PF",
+        "defect_description_et": "Gate Pulse PF",
+        "defect_description_ru": "Gate Pulse PF",
+        "defect_id": 601
+    },
+    {
+        "defect_description_en": "Gate Pulse Amin",
+        "defect_description_et": "Gate Pulse Amin",
+        "defect_description_ru": "Gate Pulse Amin",
+        "defect_id": 602
+    },
+    {
+        "defect_description_en": "Detector Sens",
+        "defect_description_et": "Detector Sens",
+        "defect_description_ru": "Detector Sens",
+        "defect_id": 603
+    },
+    {
+        "defect_description_en": "PFI test",
+        "defect_description_et": "PFI test",
+        "defect_description_ru": "PFI test",
+        "defect_id": 604
+    },
+    {
+        "defect_description_en": "IP-level",
+        "defect_description_et": "IP-level",
+        "defect_description_ru": "IP-level",
+        "defect_id": 605
+    },
+    {
+        "defect_description_en": "Voltage 1",
+        "defect_description_et": "Voltage 1",
+        "defect_description_ru": "Voltage 1",
+        "defect_id": 606
+    },
+    {
+        "defect_description_en": "Voltage 2",
+        "defect_description_et": "Voltage 2",
+        "defect_description_ru": "Voltage 2",
+        "defect_id": 607
+    },
+    {
+        "defect_description_en": "Firing Delay",
+        "defect_description_et": "Firing Delay",
+        "defect_description_ru": "Firing Delay",
+        "defect_id": 608
+    },
+    {
+        "defect_description_en": "Alpha-min",
+        "defect_description_et": "Alpha-min",
+        "defect_description_ru": "Alpha-min",
+        "defect_id": 609
+    },
+    {
+        "defect_description_en": "Gate Pulse Amax",
+        "defect_description_et": "Gate Pulse Amax",
+        "defect_description_ru": "Gate Pulse Amax",
+        "defect_id": 610
+    },
+    {
+        "defect_description_en": "RP level and PF level error",
+        "defect_description_et": "RP level and PF level error",
+        "defect_description_ru": "RP level and PF level error",
+        "defect_id": 611
+    },
+    {
+        "defect_description_en": "Printing error",
+        "defect_description_et": "Printing error",
+        "defect_description_ru": "Printing error",
+        "defect_id": 612
+    },
+    {
+        "defect_description_en": "RP time, RP level ERROR",
+        "defect_description_et": "RP time, RP level ERROR",
+        "defect_description_ru": "RP time, RP level ERROR",
+        "defect_id": 613
+    }
+]

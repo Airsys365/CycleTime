@@ -1,0 +1,62 @@
+[
+    {
+        "reason_description_en": "Coffee",
+        "reason_description_et": "Kohv",
+        "reason_description_ru": "Кофе",
+        "reason_id": 401
+    },
+    {
+        "reason_description_en": "Lunch",
+        "reason_description_et": "Lõuna",
+        "reason_description_ru": "Обед",
+        "reason_id": 402
+    },
+    {
+        "reason_description_en": "Break",
+        "reason_description_et": "Paus",
+        "reason_description_ru": "Перерыв",
+        "reason_id": 403
+    },
+    {
+        "reason_description_en": "Meeting",
+        "reason_description_et": "Koosolek",
+        "reason_description_ru": "Собрание",
+        "reason_id": 404
+    },
+    {
+        "reason_description_en": "No material available",
+        "reason_description_et": "Materjal puudub",
+        "reason_description_ru": "Нет материала",
+        "reason_id": 405
+    },
+    {
+        "reason_description_en": "Equipment breakdown",
+        "reason_description_et": "Seadme rike",
+        "reason_description_ru": "Поломка оборудования",
+        "reason_id": 406
+    },
+    {
+        "reason_description_en": "Setup / changeover",
+        "reason_description_et": "Seadistamine",
+        "reason_description_ru": "Наладка / перенастройка",
+        "reason_id": 407
+    },
+    {
+        "reason_description_en": "Waiting",
+        "reason_description_et": "Ootamine",
+        "reason_description_ru": "Ожидание ",
+        "reason_id": 408
+    },
+    {
+        "reason_description_en": "Quality issue",
+        "reason_description_et": "Kvaliteediprobleem",
+        "reason_description_ru": "Проблема качества",
+        "reason_id": 409
+    },
+    {
+        "reason_description_en": "Planned maintenance",
+        "reason_description_et": "Planeeritud hooldus",
+        "reason_description_ru": "Плановое обслуживание",
+        "reason_id": 410
+    }
+]

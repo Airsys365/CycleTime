@@ -1,0 +1,30 @@
+[
+    {
+        "name": "logs",
+        "seq": 15428
+    },
+    {
+        "name": "defect_journal",
+        "seq": 155
+    },
+    {
+        "name": "hourly_plan",
+        "seq": 5
+    },
+    {
+        "name": "work_orders_plan",
+        "seq": 3467491
+    },
+    {
+        "name": "journal",
+        "seq": 12149
+    },
+    {
+        "name": "visual_control_records",
+        "seq": 59
+    },
+    {
+        "name": "visual_control_results",
+        "seq": 172
+    }
+]

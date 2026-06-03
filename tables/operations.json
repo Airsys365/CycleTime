@@ -1,0 +1,156 @@
+[
+    {
+        "operation_id": "701",
+        "operation_name": "Assembly ",
+        "product_id": "PROD208",
+        "product_name": "SC1A208",
+        "standard_cycle_time": 420
+    },
+    {
+        "operation_id": "702",
+        "operation_name": "AOI",
+        "product_id": "PROD208",
+        "product_name": "SC1A208",
+        "standard_cycle_time": 200
+    },
+    {
+        "operation_id": "703",
+        "operation_name": "VC1+repair",
+        "product_id": "PROD208",
+        "product_name": "SC1A208",
+        "standard_cycle_time": 372
+    },
+    {
+        "operation_id": "704",
+        "operation_name": "Test",
+        "product_id": "PROD208",
+        "product_name": "SC1A208",
+        "standard_cycle_time": 192
+    },
+    {
+        "operation_id": "705",
+        "operation_name": "Silicone",
+        "product_id": "PROD208",
+        "product_name": "SC1A208",
+        "standard_cycle_time": 420
+    },
+    {
+        "operation_id": "706",
+        "operation_name": "Lacquering",
+        "product_id": "PROD208",
+        "product_name": "SC1A208",
+        "standard_cycle_time": 114
+    },
+    {
+        "operation_id": "707",
+        "operation_name": "VC2+Sil. Remove",
+        "product_id": "PROD208",
+        "product_name": "SC1A208",
+        "standard_cycle_time": 330
+    },
+    {
+        "operation_id": "708",
+        "operation_name": "Final assembly",
+        "product_id": "PROD208",
+        "product_name": "SC1A208",
+        "standard_cycle_time": 186
+    },
+    {
+        "operation_id": "709",
+        "operation_name": "VC3+Packing",
+        "product_id": "PROD208",
+        "product_name": "SC1A208",
+        "standard_cycle_time": 114
+    },
+    {
+        "operation_id": "710",
+        "operation_name": "Final Test",
+        "product_id": "PROD253",
+        "product_name": "SM2A253",
+        "standard_cycle_time": 98
+    },
+    {
+        "operation_id": "711",
+        "operation_name": "Soldering",
+        "product_id": "PROD253",
+        "product_name": "SM2A253",
+        "standard_cycle_time": 98
+    },
+    {
+        "operation_id": "8888",
+        "operation_name": "TESTOPERATION",
+        "product_id": "PROD253",
+        "product_name": "SM2A253",
+        "standard_cycle_time": 12
+    },
+    {
+        "operation_id": "899",
+        "operation_name": "testforbeta",
+        "product_id": "",
+        "product_name": "SM2A280",
+        "standard_cycle_time": 100
+    },
+    {
+        "operation_id": "712",
+        "operation_name": "Assembly ",
+        "product_id": "PROD209",
+        "product_name": "SC1A209",
+        "standard_cycle_time": 420
+    },
+    {
+        "operation_id": "713",
+        "operation_name": "AOI",
+        "product_id": "PROD209",
+        "product_name": "SC1A209",
+        "standard_cycle_time": 200
+    },
+    {
+        "operation_id": "714",
+        "operation_name": "VC1+repair",
+        "product_id": "PROD209",
+        "product_name": "SC1A209",
+        "standard_cycle_time": 372
+    },
+    {
+        "operation_id": "715",
+        "operation_name": "Test",
+        "product_id": "PROD209",
+        "product_name": "SC1A209",
+        "standard_cycle_time": 192
+    },
+    {
+        "operation_id": "716",
+        "operation_name": "Silicone",
+        "product_id": "PROD209",
+        "product_name": "SC1A209",
+        "standard_cycle_time": 420
+    },
+    {
+        "operation_id": "717",
+        "operation_name": "Lacquering",
+        "product_id": "PROD209",
+        "product_name": "SC1A209",
+        "standard_cycle_time": 114
+    },
+    {
+        "operation_id": "718",
+        "operation_name": "VC2+Sil. Remove",
+        "product_id": "PROD209",
+        "product_name": "SC1A209",
+        "standard_cycle_time": 330
+    },
+    {
+        "operation_id": "719",
+        "operation_name": "Final assembly",
+        "product_id": "PROD209",
+        "product_name": "SC1A209",
+        "standard_cycle_time": 186
+    },
+    {
+        "operation_id": "720",
+        "operation_name": "VC3+Packing",
+        "product_id": "PROD209",
+        "product_name": "SC1A209",
+        "standard_cycle_time": 114
+    }
+]

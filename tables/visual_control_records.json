@@ -1,0 +1,533 @@
+[
+    {
+        "id": 1,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:29:34",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 2,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:31:53",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 3,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:37:09",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 4,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:40:14",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 5,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:40:29",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 6,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:41:58",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 7,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:42:20",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 8,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:44:44",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 9,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:44:51",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 10,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:47:45",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 11,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:48:13",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 12,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:48:43",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 13,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 11:50:30",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 14,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 12:01:58",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 15,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 12:02:26",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 16,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 12:19:38",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 17,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": null,
+        "serial_number": null,
+        "timestamp": "2025-12-01 12:19:53",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 18,
+        "operation_id": "708",
+        "operator_id": "TLN00011",
+        "product_id": "PROD208",
+        "serial_number": "567",
+        "timestamp": "2025-12-01 14:27:51",
+        "work_order_id": 654645
+    },
+    {
+        "id": 19,
+        "operation_id": "707",
+        "operator_id": "TLN00014",
+        "product_id": "PROD208",
+        "serial_number": null,
+        "timestamp": "2025-12-01 14:34:08",
+        "work_order_id": 765476
+    },
+    {
+        "id": 20,
+        "operation_id": "708",
+        "operator_id": "TLN00011",
+        "product_id": "PROD208",
+        "serial_number": "456",
+        "timestamp": "2025-12-01 14:50:33",
+        "work_order_id": 654645
+    },
+    {
+        "id": 21,
+        "operation_id": "707",
+        "operator_id": "TLN00010",
+        "product_id": "PROD208",
+        "serial_number": null,
+        "timestamp": "2025-12-01 15:17:10",
+        "work_order_id": 765476
+    },
+    {
+        "id": 22,
+        "operation_id": "709",
+        "operator_id": "TLN00013",
+        "product_id": "PROD208",
+        "serial_number": "78",
+        "timestamp": "2025-12-01 15:44:56",
+        "work_order_id": 888888
+    },
+    {
+        "id": 23,
+        "operation_id": "707",
+        "operator_id": "TLN00016",
+        "product_id": "PROD208",
+        "serial_number": "567",
+        "timestamp": "2025-12-01 16:23:14",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 24,
+        "operation_id": "707",
+        "operator_id": "TLN00020",
+        "product_id": "PROD208",
+        "serial_number": "7",
+        "timestamp": "2025-12-01 16:30:39",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 25,
+        "operation_id": "707",
+        "operator_id": "TLN00020",
+        "product_id": "PROD208",
+        "serial_number": "65",
+        "timestamp": "2025-12-01 16:32:11",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 26,
+        "operation_id": "707",
+        "operator_id": "TLN00020",
+        "product_id": "PROD208",
+        "serial_number": "678",
+        "timestamp": "2025-12-01 16:32:26",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 27,
+        "operation_id": "708",
+        "operator_id": "TLN00013",
+        "product_id": "PROD208",
+        "serial_number": "768",
+        "timestamp": "2025-12-02 12:09:59",
+        "work_order_id": 765476
+    },
+    {
+        "id": 28,
+        "operation_id": "709",
+        "operator_id": "TLN00011",
+        "product_id": "PROD208",
+        "serial_number": "76",
+        "timestamp": "2025-12-02 12:43:09",
+        "work_order_id": 888888
+    },
+    {
+        "id": 29,
+        "operation_id": "708",
+        "operator_id": "TLN00016",
+        "product_id": "PROD208",
+        "serial_number": "978",
+        "timestamp": "2025-12-02 17:37:47",
+        "work_order_id": 888888
+    },
+    {
+        "id": 30,
+        "operation_id": "707",
+        "operator_id": "TLN00013",
+        "product_id": "PROD208",
+        "serial_number": "87",
+        "timestamp": "2025-12-03 08:59:46",
+        "work_order_id": 654645
+    },
+    {
+        "id": 31,
+        "operation_id": "708",
+        "operator_id": "TLN00026",
+        "product_id": "PROD208",
+        "serial_number": "790",
+        "timestamp": "2025-12-03 09:04:41",
+        "work_order_id": 654645
+    },
+    {
+        "id": 32,
+        "operation_id": "708",
+        "operator_id": "TLN00017",
+        "product_id": "PROD208",
+        "serial_number": "567",
+        "timestamp": "2025-12-03 13:33:56",
+        "work_order_id": 888888
+    },
+    {
+        "id": 33,
+        "operation_id": "704",
+        "operator_id": "TLN00010",
+        "product_id": "PROD208",
+        "serial_number": "567",
+        "timestamp": "2025-12-03 14:29:15",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 34,
+        "operation_id": "708",
+        "operator_id": "TLN00025",
+        "product_id": "PROD208",
+        "serial_number": "768",
+        "timestamp": "2025-12-03 14:30:24",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 35,
+        "operation_id": "708",
+        "operator_id": "TLN00022",
+        "product_id": "PROD208",
+        "serial_number": "879",
+        "timestamp": "2025-12-03 15:19:11",
+        "work_order_id": 888888
+    },
+    {
+        "id": 36,
+        "operation_id": "709",
+        "operator_id": "TLN00018",
+        "product_id": "PROD208",
+        "serial_number": "87",
+        "timestamp": "2025-12-04 10:25:19",
+        "work_order_id": 654645
+    },
+    {
+        "id": 37,
+        "operation_id": "707",
+        "operator_id": "TLN00022",
+        "product_id": "PROD208",
+        "serial_number": "654",
+        "timestamp": "2025-12-04 10:38:28",
+        "work_order_id": 654645
+    },
+    {
+        "id": 38,
+        "operation_id": "707",
+        "operator_id": "TLN00012",
+        "product_id": "PROD208",
+        "serial_number": "65",
+        "timestamp": "2025-12-04 11:11:39",
+        "work_order_id": 765476
+    },
+    {
+        "id": 39,
+        "operation_id": "707",
+        "operator_id": "TLN00012",
+        "product_id": "PROD208",
+        "serial_number": "678",
+        "timestamp": "2025-12-04 11:17:22",
+        "work_order_id": 765476
+    },
+    {
+        "id": 40,
+        "operation_id": "707",
+        "operator_id": "TLN00012",
+        "product_id": "PROD208",
+        "serial_number": "567",
+        "timestamp": "2025-12-04 11:29:01",
+        "work_order_id": 765476
+    },
+    {
+        "id": 41,
+        "operation_id": "707",
+        "operator_id": "TLN00013",
+        "product_id": "PROD208",
+        "serial_number": "54",
+        "timestamp": "2025-12-04 13:15:15",
+        "work_order_id": 888888
+    },
+    {
+        "id": 42,
+        "operation_id": "708",
+        "operator_id": "TLN00019",
+        "product_id": "PROD208",
+        "serial_number": "8",
+        "timestamp": "2025-12-04 14:32:36",
+        "work_order_id": 654645
+    },
+    {
+        "id": 43,
+        "operation_id": "709",
+        "operator_id": "TLN00011",
+        "product_id": "PROD208",
+        "serial_number": "67875",
+        "timestamp": "2025-12-04 14:47:36",
+        "work_order_id": 654645
+    },
+    {
+        "id": 44,
+        "operation_id": "707",
+        "operator_id": "TLN00014",
+        "product_id": "PROD208",
+        "serial_number": "567",
+        "timestamp": "2025-12-04 14:52:13",
+        "work_order_id": 888888
+    },
+    {
+        "id": 45,
+        "operation_id": "707",
+        "operator_id": "TLN00014",
+        "product_id": "PROD208",
+        "serial_number": "567",
+        "timestamp": "2025-12-04 14:52:51",
+        "work_order_id": 888888
+    },
+    {
+        "id": 46,
+        "operation_id": "707",
+        "operator_id": "TLN00012",
+        "product_id": "PROD208",
+        "serial_number": "3567",
+        "timestamp": "2025-12-04 14:53:44",
+        "work_order_id": 654645
+    },
+    {
+        "id": 47,
+        "operation_id": "708",
+        "operator_id": "TLN00019",
+        "product_id": "PROD208",
+        "serial_number": "ук6",
+        "timestamp": "2025-12-04 15:00:30",
+        "work_order_id": 654645
+    },
+    {
+        "id": 48,
+        "operation_id": "708",
+        "operator_id": "TLN00010",
+        "product_id": "PROD208",
+        "serial_number": "786",
+        "timestamp": "2025-12-04 15:12:00",
+        "work_order_id": 888888
+    },
+    {
+        "id": 49,
+        "operation_id": "708",
+        "operator_id": "TLN00016",
+        "product_id": "PROD208",
+        "serial_number": "5678",
+        "timestamp": "2025-12-04 15:12:44",
+        "work_order_id": 654645
+    },
+    {
+        "id": 50,
+        "operation_id": "708",
+        "operator_id": "TLN00015",
+        "product_id": "PROD208",
+        "serial_number": "3456",
+        "timestamp": "2025-12-04 15:38:51",
+        "work_order_id": 765476
+    },
+    {
+        "id": 51,
+        "operation_id": "708",
+        "operator_id": "TLN00015",
+        "product_id": "PROD208",
+        "serial_number": "3456",
+        "timestamp": "2025-12-04 15:47:30",
+        "work_order_id": 765476
+    },
+    {
+        "id": 52,
+        "operation_id": "707",
+        "operator_id": "TLN00015",
+        "product_id": "PROD208",
+        "serial_number": "65",
+        "timestamp": "2025-12-08 09:40:55",
+        "work_order_id": 1345688
+    },
+    {
+        "id": 53,
+        "operation_id": "708",
+        "operator_id": "TLN0005",
+        "product_id": "PROD208",
+        "serial_number": "ке",
+        "timestamp": "2025-12-09 09:04:37",
+        "work_order_id": 777777
+    },
+    {
+        "id": 54,
+        "operation_id": "707",
+        "operator_id": "TLN0002",
+        "product_id": "SC1A208",
+        "serial_number": "5644",
+        "timestamp": "2025-12-18 07:00:06",
+        "work_order_id": 617858
+    },
+    {
+        "id": 55,
+        "operation_id": "708",
+        "operator_id": "TLN0004",
+        "product_id": "SC1A208",
+        "serial_number": "7",
+        "timestamp": "2025-12-22 07:34:26",
+        "work_order_id": 617858
+    },
+    {
+        "id": 56,
+        "operation_id": "708",
+        "operator_id": "TLN0002",
+        "product_id": "SC1A208",
+        "serial_number": "99",
+        "timestamp": "2026-01-07 08:13:34",
+        "work_order_id": 617858
+    },
+    {
+        "id": 57,
+        "operation_id": "708",
+        "operator_id": "TLN0028",
+        "product_id": "SC1A208",
+        "serial_number": "6",
+        "timestamp": "2026-01-09 08:37:35",
+        "work_order_id": 617877
+    },
+    {
+        "id": 58,
+        "operation_id": "707",
+        "operator_id": "TLN0011",
+        "product_id": "SC1A208",
+        "serial_number": "4",
+        "timestamp": "2026-01-13 14:01:52",
+        "work_order_id": 617861
+    },
+    {
+        "id": 59,
+        "operation_id": "708",
+        "operator_id": "TLN0001",
+        "product_id": "SC1A208",
+        "serial_number": "868",
+        "timestamp": "2026-01-27 12:36:08",
+        "work_order_id": 617864
+    }
+]
