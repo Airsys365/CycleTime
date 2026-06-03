@@ -33,8 +33,9 @@ async function loadOperationsDaily() {
         <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
           <thead>
             <tr style="background: #222; color: #ccc;">
+              <th style="padding: 8px; text-align: left;">Operator</th>
               <th style="padding: 8px; text-align: left;">Operation</th>
-			  <th style="padding: 8px; text-align: left;">WO</th>  
+			  <th style="padding: 8px; text-align: left;">WO</th>
 			  <th style="padding: 8px; text-align: left;">Product</th>
 			  <th style="padding: 8px; text-align: right;">Output</th>
 			  <th style="padding: 8px; text-align: right;">Avg Cycle</th>
@@ -69,13 +70,20 @@ function getCycleStyle(status) {
 function renderOperationsDailyTable(data) {
   const tbody = document.getElementById("operations-daily-body");
   
-  tbody.innerHTML = data.map(row => `
+  tbody.innerHTML = data.map(row => {
+    const cycleVal = row.cycle_minutes;
+    const cycleText = cycleVal > 0 ? cycleVal.toFixed(1) + ' min' : '—';
+    const cycleStyle = getCycleStyle(row.cycle_status);
+    return `
 	  <tr style="border-bottom: 1px solid #333;">
+		<td style="padding: 8px;">
+		  ${row.operator_name || '—'}
+		</td>
 		<td style="padding: 8px; font-weight: bold;">
 		  ${row.operation_name || row.operation_id || '—'}
 		</td>
 		<td style="padding: 8px;">
-		  ${row.work_order_id || '—'}                
+		  ${row.work_order_id || '—'}
 		</td>
 		<td style="padding: 8px;">
 		  ${row.product_name || '—'}
@@ -83,11 +91,12 @@ function renderOperationsDailyTable(data) {
 		<td style="padding: 8px; text-align: right; font-weight: bold;">
 		  ${row.total_count}
 		</td>
-		<td style="padding: 8px; text-align: right;">
-		  ${(row.avg_cycle_minutes || row.cycle_minutes) > 0 ? (row.avg_cycle_minutes || row.cycle_minutes).toFixed(1) + ' min' : '—'}
+		<td style="padding: 8px; text-align: right; ${cycleStyle}">
+		  ${cycleText}
 		</td>
 	  </tr>
-	`).join('');
+	`;
+  }).join('');
 
 }
 

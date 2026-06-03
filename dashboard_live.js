@@ -30,7 +30,7 @@ async function loadLiveOperations() {
     if (!rows.length) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="7" style="padding:8px; text-align:center; color:#aaa;">
+          <td colspan="9" style="padding:8px; text-align:center; color:#aaa;">
             No active operations
           </td>
         </tr>
@@ -76,6 +76,8 @@ async function loadLiveOperations() {
 			<td style="padding:8px; text-align:center;">
 			  ${row.operation_name || row.operation || row.operation_id || "—"}
 			</td>
+
+			<td style="padding:8px; text-align:center;">${row.product_name || "—"}</td>
 
 			<td style="padding:8px; text-align:center;">${row.work_order_id || "—"}</td>
 

@@ -422,6 +422,7 @@ module.exports = (db) => {
                     j.work_order_id,
                     MAX(j.timestamp) AS last_activity,
                     op.operation_name,
+                    op.product_name,
                     op.standard_cycle_time AS plan_sec,
 
                     (SELECT status FROM journal
@@ -524,6 +525,7 @@ module.exports = (db) => {
 		operator_id: row.operator_id,
 		operation_id: row.operation_id,
 		operation_name: row.operation_name,
+		product_name: row.product_name || null,
 		work_order_id: row.work_order_id,
 		last_activity: row.last_activity,
 		total_count: totalCount,
