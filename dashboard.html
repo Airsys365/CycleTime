@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Production Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    body { background:#111; color:#eee; font-family:Arial; margin:0; padding:20px; }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .product-card {
+      background: #1a1a1a;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.4);
+    }
+    .progress-bar {
+      height: 10px;
+      border-radius: 5px;
+      background: #333;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      background: #00c853;
+      width: 0%;
+      transition: width 0.5s;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📊 Production Dashboard</h1>
+  
+  <h2 style="margin-top:40px;">🟢 Live Operations</h2>
+	<div id="live-operations" style="overflow-x:auto;">
+	  <table id="live-table" style="width:100%; border-collapse:collapse; background:#1a1a1a;">
+		<thead>
+		  <tr style="background:#222; color:#ccc; text-align:center;">
+			<th style="padding:8px;">Operator</th>
+			<th style="padding:8px;">Operation</th>
+			<th style="padding:8px;">Work Order</th>
+			<th style="padding:8px;">Total</th>
+			<th style="padding:8px;">Status</th>
+			<th style="padding:8px;">Active Time</th>
+			<th style="padding:8px;">Cycle Time</th>
+			<th style="padding:8px;">Ref Cycle</th>
+		  </tr>
+		</thead>
+		<tbody id="live-body"></tbody>
+	  </table>
+	</div>
+	
+
+	<h2 style="margin-top:40px;">📊 Downtime Statistics</h2>
+	<div id="downtime-chart-container" style="background:#1a1a1a; padding:20px; border-radius:10px;">
+	  <canvas id="downtimeChart" width="400" height="200"></canvas>
+	</div>
+
+	<h2 style="margin-top:40px;">📋 Operations Performance</h2>
+		<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+		  <div id="operations-daily-container"></div>
+		  <div id="operations-weekly-container"></div>
+		</div>
+		
+	<h2 style="margin-top:40px;">❌ Defects Analysis (Monthly)</h2>
+
+	<div id="defects-dashboard" 
+		 style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="/js/dashboard/dashboard_operations_weekly.js"></script>
+	<script src="/js/dashboard/defects_dashboard.js"></script>	
+	<script src="/js/dashboard/dashboard_operations_daily.js"></script>	
+	<script src="/js/dashboard/dashboard_live.js"></script>
+	<script src="/js/dashboard/dashboard_downtime_chart.js"></script>
+</body>
+</html>
