@@ -209,11 +209,28 @@ db.serialize(() => {
 
 
 
+db.serialize(() => {
+  db.run(`
+    CREATE TABLE IF NOT EXISTS logs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      timestamp TEXT,
+      type TEXT,
+      operator TEXT,
+      station TEXT,
+      wo TEXT,
+      data TEXT
+    )
+  `);
+});
+
 function normalizeSN(sn) {
     if (!sn) return null;
     // Очистка: удаляем "S/N:", пробелы, приводим к верхнему регистру
     return sn.toString().replace(/S\/N[:\s]*/i, "").trim().toUpperCase();
 }
+
+// --- API для логирования событий ---
+let logs = [];
 
 // --- API для логирования событий ---
 app.post('/api/log', (req, res) => {
@@ -231,7 +248,7 @@ app.post('/api/log', (req, res) => {
 
   // --- 1) Пишем в лог (технический) ---
   db.run(
-    `INSERT INTO logs (timestamp, type, operator, station, wo, data)
+    `INSERT INTO logs (timestamp, type, operator, operation_id, wo, data)
      VALUES (?, ?, ?, ?, ?, ?)`,
     [
       entry.timestamp,
@@ -304,7 +321,6 @@ app.post('/api/log', (req, res) => {
       const rawSerial = parsed.sn || parsed.serial_number || null;
 	  const serial = normalizeSN(rawSerial);
 
-      console.log('[COUNT_ITEM] storing:', { operator: entry.operator, operation_id: entry.operation_id, wo: entry.wo, serial });
       db.run(`
         INSERT INTO journal (
           timestamp, operator_id, operation_id, event_type,
@@ -318,11 +334,7 @@ app.post('/api/log', (req, res) => {
         parsed.item_count || 1,
         entry.wo,
         serial
-      ],
-      function(err) {
-        if (err) console.error('[COUNT_ITEM] INSERT failed:', err.message, { operator: entry.operator, operation_id: entry.operation_id, wo: entry.wo });
-        else console.log('[COUNT_ITEM] INSERT ok, rowid:', this.lastID, 'operator:', entry.operator);
-      });
+      ]);
       break;
     }
 
@@ -398,54 +410,6 @@ app.get('/api/logs', (req, res) => {
   });
 });
 
-// Diagnostic: all journal entries for a specific operator
-app.get('/api/debug/operator/:id', (req, res) => {
-  const opId = req.params.id;
-  db.all(
-    `SELECT event_type, COUNT(*) as cnt, date(timestamp) as day
-     FROM journal WHERE operator_id = ?
-     GROUP BY event_type, date(timestamp)
-     ORDER BY day DESC, event_type`,
-    [opId],
-    (err, rows) => {
-      if (err) return res.status(500).json({ error: err.message });
-      db.all(
-        `SELECT journal_id, timestamp, event_type, operation_id, work_order_id, serial_number, item_count, status, is_active
-         FROM journal WHERE operator_id = ? ORDER BY journal_id DESC LIMIT 20`,
-        [opId],
-        (err2, recent) => {
-          if (err2) return res.status(500).json({ error: err2.message });
-          // Also find which operator_ids have records today (in case records stored under wrong id)
-          db.all(
-            `SELECT operator_id, COUNT(*) as cnt FROM journal
-             WHERE date(timestamp) = date('now')
-             GROUP BY operator_id ORDER BY cnt DESC LIMIT 20`,
-            [],
-            (err3, today) => {
-              // Find records with empty/null operator_id (common bug)
-              db.all(
-                `SELECT journal_id, timestamp, event_type, operation_id, work_order_id, operator_id
-                 FROM journal WHERE (operator_id IS NULL OR operator_id = '')
-                 ORDER BY journal_id DESC LIMIT 10`,
-                [],
-                (err4, nullOp) => {
-                  res.json({
-                    operator_id: opId,
-                    summary: rows,
-                    recent_rows: recent,
-                    todays_operators: today || [],
-                    null_operator_rows: nullOp || []
-                  });
-                }
-              );
-            }
-          );
-        }
-      );
-    }
-  );
-});
-
 
 
 
@@ -467,17 +431,8 @@ app.get("/api/admin/get_tables", (req, res) => {
 app.post("/api/admin/import_excel", (req, res) => {
     const { table, rows } = req.body;
 
-    const ALLOWED_TABLES = [
-        'operators', 'operations', 'downtime_reasons', 'components',
-        'defects', 'products', 'defect_journal', 'work_orders_plan'
-    ];
-
     if (!table || !rows || !Array.isArray(rows)) {
         return res.json({ status: "error", error: "Invalid payload" });
-    }
-
-    if (!ALLOWED_TABLES.includes(table)) {
-        return res.json({ status: "error", error: `Table "${table}" is not allowed for import` });
     }
 
     if (rows.length === 0) {
@@ -1101,50 +1056,29 @@ app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
 
-// === Авто-завершение забытых операций в конце смены ===
-
+// --- Авто-завершение забытых операций в конце смены (14:30 и 22:30) ---
 function autoCloseActiveSessions(label) {
   const endTime = getLocalTimestamp();
-
   db.all(
     `SELECT DISTINCT operator_id, operation_id, work_order_id
-     FROM journal
-     WHERE is_active = 1 AND status IN ('active', 'paused')`,
-    [],
-    (err, rows) => {
-      if (err) {
-        console.error('[AutoClose] Ошибка запроса активных сессий:', err.message);
-        return;
-      }
-      if (!rows || rows.length === 0) {
-        console.log(`[AutoClose] ${label}: нет активных сессий`);
-        return;
-      }
-
-      console.log(`[AutoClose] ${label}: закрываем ${rows.length} сессий`);
-
+     FROM journal WHERE is_active = 1 AND status IN ('active', 'paused')`,
+    [], (err, rows) => {
+      if (err || !rows || rows.length === 0) return;
       rows.forEach(row => {
-        // Вставляем END_OP_SESSION чтобы cycle-time считался корректно
         db.run(
           `INSERT INTO journal (timestamp, operator_id, operation_id, event_type, work_order_id, end_time, status, is_active)
            VALUES (?, ?, ?, 'END_OP_SESSION', ?, ?, 'finished', 0)`,
           [endTime, row.operator_id, row.operation_id, row.work_order_id, endTime]
         );
-
-        // Закрываем все активные строки этой сессии
         db.run(
           `UPDATE journal SET is_active = 0, status = 'finished', end_time = ?
-           WHERE operator_id = ? AND work_order_id = ? AND status IN ('active', 'paused')`,
-          [endTime, row.operator_id, row.work_order_id]
+           WHERE operator_id = ? AND operation_id = ? AND work_order_id = ? AND status IN ('active', 'paused')`,
+          [endTime, row.operator_id, row.operation_id, row.work_order_id]
         );
-
         console.log(`[AutoClose] закрыта: ${row.operator_id} / ${row.operation_id} / ${row.work_order_id}`);
       });
-
-      // Записываем в технический лог
       db.run(
-        `INSERT INTO logs (timestamp, type, operator, station, wo, data)
-         VALUES (?, 'AUTO_CLOSE', 'system', 'system', 'all', ?)`,
+        `INSERT INTO logs (timestamp, type, operator, station, wo, data) VALUES (?, 'AUTO_CLOSE', 'system', 'system', 'all', ?)`,
         [endTime, JSON.stringify({ label, sessions: rows.length })]
       );
     }
@@ -1152,20 +1086,15 @@ function autoCloseActiveSessions(label) {
 }
 
 let lastAutoCloseKey = null;
-
 setInterval(() => {
   const now = new Date();
   const hh = now.getHours();
   const mm = now.getMinutes();
-
   const isShiftEnd = (hh === 14 && mm === 30) || (hh === 22 && mm === 30);
   if (!isShiftEnd) return;
-
-  // Защита от двойного срабатывания в одну минуту
   const key = `${now.toDateString()}_${hh}:${mm}`;
   if (lastAutoCloseKey === key) return;
   lastAutoCloseKey = key;
-
   autoCloseActiveSessions(`shift_end_${hh}:${mm}`);
 }, 60 * 1000);
 
@@ -1251,7 +1180,7 @@ app.post('/api/update_status', (req, res) => {
               } else {
                 console.log(`✅ Fallback обновление: ${this.changes} строк`);
               }
-              res.json({ success: true, changes: this.changes });
+              res.json({ success: true, changes: this.changes + this.changes });
             }
           );
         } else {
