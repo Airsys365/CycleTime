@@ -45,30 +45,30 @@ HTML-файлы **не хранятся в репо** (подключаются 
 
 | Таблица | Назначение | Ключевые колонки |
 |---------|-----------|-----------------|
-| `operators` | Операторы | `operator_id` (TLN00001), `operator_name` |
+| `operators` | Операторы | `operator_id` (TLN0001...), `operator_name` |
 | `operations` | Операции/станции | `operation_id`, `operation_name`, `product_id`, `product_name`, `standard_cycle_time` (сек) |
 | `products` | Продукты | `product_id`, `product_name` |
-| `downtime_reasons` | Причины простоев | `reason_id`, `reason_description` |
-| `components` | Компоненты продукта | `component_id`, `component_name`, `product_id`, `product_name` (добавлен через Excel) |
-| `defects` | Типы дефектов | `defect_id`, `component_id`, `defect_description` |
-| `journal` | Главный журнал событий | `operator_id`, `operation_id`, `event_type`, `work_order_id`, `serial_number`, `item_count`, `reason_id`, `status`, `is_active`, `start_time`, `end_time` |
+| `downtime_reasons` | Причины простоев | `reason_id`, `reason_description_ru`, `reason_description_en`, `reason_description_et` |
+| `components` | Компоненты продукта | `component_id`, `component_name`, `product_id`, `product_name` |
+| `defects` | Типы дефектов | `defect_id`, `defect_description_ru`, `defect_description_en`, `defect_description_et` |
+| `journal` | Главный журнал событий | `operator_id`, `operation_id`, `event_type`, `work_order_id`, `serial_number`, `item_count`, `reason_id`, `status`, `is_active`, `start_time`, `end_time`, `duration_sec`, `notes` |
 | `defect_journal` | Журнал дефектов | `operator_id`, `operation_id`, `work_order_id`, `component_id`, `defect_id`, `product_id`, `serial_number`, `product_name` |
-| `work_orders_plan` | Рабочие ордера | `work_order_id` (UNIQUE), `product_name`, `planned_total` |
-| `logs` | Технический лог | `timestamp`, `type`, `operator`, `station`, `wo`, `data` |
+| `work_orders_plan` | Рабочие ордера | `work_order_id` (UNIQUE), `product_name`, `planned_total`, `is_closed` |
+| `logs` | Технический лог | `timestamp`, `type`, `operator`, `operation_id`, `wo`, `data` |
+| `hourly_plan` | Часовой план | `hour`, `product_name`, `planned_count` |
+| `work_orders_erp` | Ордера из ERP | `work_order_id`, `item`, `description`, `quantity_ordered`, `quantity_delivered`, `erp_status`, `last_sync_ts` |
 
-### VIEW (создан в БД вручную, не в коде)
+### ⚠️ Важно: реальная схема БД ≠ схема в коде
 
-`work_orders_plan_active` — VIEW над `work_orders_plan`. Используется в `/api/work_orders_plan` (GET) и `/api/products` (GET). На свежей БД нужно создать вручную.
+**`logs` таблица**: реальная колонка называется `operation_id` (не `station` как в CREATE TABLE в коде). INSERT в коде использует `operation_id` — это правильно для реальной БД. **НЕ менять на `station`** — это сломает запись логов и может аффектить работу journal.
 
-### Таблицы визуального контроля (в коде схемы нет, существуют в реальной БД)
+**`defects`**: в реальной БД колонки `defect_description_ru/en/et`, а не `defect_description`.
 
-`visual_control_records` и `visual_control_results` — используются в `/api/log_visual_check`. На свежей БД нужно создать вручную.
+**`downtime_reasons`**: в реальной БД `reason_description_ru/en/et`, а не `reason_description`.
 
-### Эволюция схемы
+**`journal`**: реальная БД имеет `timestamp TEXT` (nullable), плюс дополнительные колонки `duration_sec` и `notes` которых нет в CREATE TABLE.
 
-Многие колонки добавлялись через `ALTER TABLE` (в конце `db.serialize`), а не через `CREATE TABLE`. Это нормально — при свежей установке они уже есть в CREATE TABLE, при обновлении добавляются через ALTER. Ошибки "duplicate column" ожидаемы и обрабатываются.
-
-Таблицы `defects` и `downtime_reasons` в реальной БД имеют дополнительные колонки (`defect_description_en`, `reason_description_en`, `reason_description_ru`, `reason_description_et` и т.д.) — добавлены через Excel-импорт. В коде CREATE TABLE их нет.
+**`defect_journal`**: имеет FOREIGN KEY на `tmp_defects` (артефакт импорта, таблицы нет — не мешает, FK в SQLite не принудительны по умолчанию).
 
 ## Основной флоу оператора
 
@@ -184,34 +184,22 @@ index.html:
 
 ## История изменений
 
-### Сессия 2026-05-28 — аудит и исправление багов
+### Сессия 2026-05-28 — ⚠️ ОТКАЧЕНО (сломало систему)
 
-**Исправлены:**
-- `logs` INSERT: колонка `operation_id` → `station` (все технические логи молча падали)
-- Дублированное создание таблицы `logs`
-- Неиспользуемая переменная `let logs = []`
-- `update_status` fallback: `this.changes + this.changes` → `this.changes`
-- SQL injection в `import_excel`: добавлен whitelist таблиц
+Изменения в `server.js` и `app.js` вызвали регрессию: COUNT_ITEM записи перестали сохраняться в journal. Причина выяснена: "фикс" колонки logs INSERT с `operation_id` на `station` был НЕПРАВИЛЬНЫМ — реальная БД имеет колонку `operation_id`, а не `station`. Это сломало запись логов и по цепочке аффектило journal. Оба файла откачены к оригиналу.
 
-**Удалён мёртвый код из app.js:**
-- Пустые функции `initializeAppState()`, `syncLanguageAcrossPages()`
-- Недостижимые функции `loadInitialState()`, `loadProductsForDefects()`
-- `confirmSelection()` — вызывала несуществующий `setGlobalState()`, всегда падала с ReferenceError
-- Второй DOMContentLoaded handler для `confirm-btn`
-- Дублированный `loadOperators()` (вторая копия перезаписывала первую, без guard'а)
-- Константы `VALID_WO_PREFIX`, `FINAL_OPERATIONS` (нигде не использовались)
-- Дублированный блок логики `logoutBtn` в `updateUI()`
-
-**Ветка:** `claude/vigilant-carson-5H3xX`
+**Вывод: в server.js код `INSERT INTO logs (..., operation_id, ...)` — правильный, не трогать.**
 
 ### Сессия 2026-06-03 — авто-завершение забытых операций
 
-**Добавлено в `server.js`:**
+**Добавлено в `server.js`** (поверх рабочего оригинала):
 - `autoCloseActiveSessions(label)` — находит все активные/paused сессии и закрывает каждую:
   вставляет `END_OP_SESSION` в journal + UPDATE `status='finished'`, `is_active=0`, `end_time=now`
 - `setInterval` каждые 60 сек проверяет время; срабатывает в **14:30** и **22:30** (конец смен)
 - Guard `lastAutoCloseKey` — защита от двойного срабатывания в одну минуту
 - Запись в `logs` с типом `AUTO_CLOSE` для аудита
+
+**app.js** — откачен к оригиналу (изменения 2026-05-28 сессии вызывали глюки интерфейса: нельзя было выйти после завершения операции).
 
 ## Известные особенности / осторожно
 

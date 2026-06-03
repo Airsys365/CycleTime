@@ -1395,97 +1395,79 @@ app.get('/api/reports/downtime_summary', (req, res) => {
   });
 });
 
-// === 📋 Операции за день (НОВАЯ ВЕРСИЯ) ===
+// === 📋 Операции за день (одна строка = одно завершение END_OP_SESSION) ===
 app.get('/api/reports/operations_daily', (req, res) => {
   console.log('📋 [operations_daily] Запрос получен');
 
   const sql = `
-   -- === 📋 Операции за день (CLEAN VERSION) ===
-	WITH completed_ops AS (
-	  SELECT DISTINCT operation_id, work_order_id
-	  FROM journal
-	  WHERE event_type = 'END_OP_SESSION'
-		AND strftime('%s', timestamp) >= strftime('%s', datetime('now','start of day'))
-		AND strftime('%s', timestamp) <  strftime('%s', datetime('now','start of day','+1 day'))
-	),
-
-	count_events AS (
-	  SELECT
-		j.operation_id,
-		j.work_order_id,
-		j.timestamp
-	  FROM journal j
-	  WHERE j.event_type = 'COUNT_ITEM'
-		AND strftime('%s', j.timestamp) >= strftime('%s', datetime('now','start of day'))
-		AND strftime('%s', j.timestamp) <  strftime('%s', datetime('now','start of day','+1 day'))
-	),
-
-	timed_events AS (
-	  SELECT
-		c.operation_id,
-		c.work_order_id,
-		c.timestamp,
-		LAG(c.timestamp) OVER (
-		  PARTITION BY c.operation_id, c.work_order_id
-		  ORDER BY c.timestamp
-		) AS prev_timestamp
-	  FROM count_events c
-	),
-
-	base AS (
-	  SELECT
-		te.operation_id,
-		te.work_order_id,
-		o.operation_name,
-		o.product_name,
-
-		-- ⏱ фактический такт (мин/шт)
-		ROUND(
-		  AVG(
-			(JULIANDAY(te.timestamp) - JULIANDAY(te.prev_timestamp)) * 86400
-		  ) / 60.0,
-		  1
-		) AS cycle_minutes,
-
-		-- 📏 плановый цикл (мин/шт)
-		o.standard_cycle_time / 60.0 AS planned_cycle_minutes,
-
-		-- 🔢 количество изделий
-		COUNT(*) AS total_count
-
-	  FROM timed_events te
-	  JOIN completed_ops co
-		ON co.operation_id  = te.operation_id
-	   AND co.work_order_id = te.work_order_id
-	  LEFT JOIN operations o ON te.operation_id = o.operation_id
-	  WHERE te.prev_timestamp IS NOT NULL
-	  GROUP BY
-		te.operation_id,
-		te.work_order_id,
-		o.operation_name,
-		o.product_name
-	)
-
-
-	SELECT
-	  operation_id,
-	  operation_name,
-	  work_order_id,
-	  product_name,
-	  total_count,
-	  cycle_minutes,
-	  planned_cycle_minutes,
-
-	  CASE
-		WHEN planned_cycle_minutes IS NULL THEN NULL
-		WHEN cycle_minutes / planned_cycle_minutes <= 1.0 THEN 'ok'
-		WHEN cycle_minutes / planned_cycle_minutes <= 1.2 THEN 'warning'
-		ELSE 'bad'
-	  END AS cycle_status
-
-	FROM base
-	ORDER BY total_count DESC;
- 
+    WITH end_events AS (
+      SELECT journal_id AS end_jid, operator_id, operation_id, work_order_id
+      FROM journal
+      WHERE event_type = 'END_OP_SESSION'
+        AND date(timestamp) = date('now')
+    ),
+    session_starts AS (
+      SELECT
+        e.end_jid,
+        e.operator_id,
+        e.operation_id,
+        e.work_order_id,
+        COALESCE(
+          (SELECT MAX(s.journal_id)
+           FROM journal s
+           WHERE s.operator_id  = e.operator_id
+             AND s.operation_id = e.operation_id
+             AND s.work_order_id = e.work_order_id
+             AND s.event_type   = 'START_OP'
+             AND s.journal_id   < e.end_jid),
+          0
+        ) AS start_jid
+      FROM end_events e
+    ),
+    item_stats AS (
+      SELECT
+        sw.end_jid,
+        COUNT(j.journal_id)  AS total_count,
+        MIN(j.timestamp)     AS first_scan,
+        MAX(j.timestamp)     AS last_scan
+      FROM session_starts sw
+      LEFT JOIN journal j
+        ON  j.operator_id  = sw.operator_id
+        AND j.operation_id = sw.operation_id
+        AND j.work_order_id = sw.work_order_id
+        AND j.event_type   = 'COUNT_ITEM'
+        AND j.journal_id   > sw.start_jid
+        AND j.journal_id   < sw.end_jid
+      GROUP BY sw.end_jid
+    )
+    SELECT
+      sw.operator_id,
+      oper.operator_name,
+      sw.operation_id,
+      o.operation_name,
+      sw.work_order_id,
+      o.product_name,
+      COALESCE(ic.total_count, 0) AS total_count,
+      CASE WHEN COALESCE(ic.total_count, 0) > 1
+        THEN ROUND(
+          (JULIANDAY(ic.last_scan) - JULIANDAY(ic.first_scan)) * 1440.0
+          / NULLIF(ic.total_count - 1, 0), 1)
+        ELSE NULL
+      END AS cycle_minutes,
+      ROUND(o.standard_cycle_time / 60.0, 1) AS planned_cycle_minutes,
+      CASE
+        WHEN o.standard_cycle_time IS NULL OR COALESCE(ic.total_count, 0) <= 1 THEN NULL
+        WHEN ROUND((JULIANDAY(ic.last_scan)-JULIANDAY(ic.first_scan))*1440.0/NULLIF(ic.total_count-1,0),1)
+             <= ROUND(o.standard_cycle_time/60.0,1) THEN 'ok'
+        WHEN ROUND((JULIANDAY(ic.last_scan)-JULIANDAY(ic.first_scan))*1440.0/NULLIF(ic.total_count-1,0),1)
+             <= ROUND(o.standard_cycle_time/60.0,1) * 1.2 THEN 'warning'
+        ELSE 'bad'
+      END AS cycle_status
+    FROM session_starts sw
+    LEFT JOIN item_stats ic    ON ic.end_jid      = sw.end_jid
+    LEFT JOIN operations o     ON o.operation_id  = sw.operation_id
+    LEFT JOIN operators  oper  ON oper.operator_id = sw.operator_id
+    ORDER BY sw.end_jid DESC
   `;
 
   db.all(sql, [], (err, rows) => {
@@ -1496,7 +1478,6 @@ app.get('/api/reports/operations_daily', (req, res) => {
 
     res.json({
       status: 'ok',
-	  version: 'NEW_2025', 
       date: new Date().toISOString().slice(0, 10),
       data: rows
     });
@@ -1507,16 +1488,29 @@ app.get('/api/reports/operations_daily', (req, res) => {
 
 
 
-// === 📅 Операции за неделю (ТОЛЬКО ЗАВЕРШЁННЫЕ ОПЕРАЦИИ) ===
-app.get('/api/reports/operations_weekly', (req, res) => { 
-  console.log('📊 [operations_weekly] НОВАЯ ВЕРСИЯ v2');
+// === 📅 Операции за неделю (понедельник — сегодня, только завершённые) ===
+app.get('/api/reports/operations_weekly', (req, res) => {
+  console.log('📊 [operations_weekly] запрос');
+
+  // Вычисляем начало текущей недели (понедельник) в локальном времени
+  const now = new Date();
+  const dow = now.getDay(); // 0=Вс, 1=Пн, ..., 6=Сб
+  const daysFromMonday = (dow === 0) ? 6 : dow - 1;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - daysFromMonday);
+  monday.setHours(0, 0, 0, 0);
+  const mondayStr = monday.getFullYear() + '-' +
+    String(monday.getMonth() + 1).padStart(2, '0') + '-' +
+    String(monday.getDate()).padStart(2, '0') + ' 00:00:00';
+
+  console.log('📅 Неделя с:', mondayStr);
 
   const sql = `
   WITH finished_week AS (
     SELECT DISTINCT operation_id, work_order_id
     FROM journal
     WHERE event_type = 'END_OP_SESSION'
-      AND timestamp >= datetime('now','-6 days','start of day')
+      AND timestamp >= ?
   ),
 
   counts AS (
@@ -1588,7 +1582,7 @@ app.get('/api/reports/operations_weekly', (req, res) => {
   ORDER BY total_count DESC
   `;
 
-  db.all(sql, [], (err, rows) => {
+  db.all(sql, [mondayStr], (err, rows) => {
     if (err) {
       console.error('❌ Ошибка в operations_weekly:', err.message);
       return res.status(500).json({ status: 'error', error: err.message });
