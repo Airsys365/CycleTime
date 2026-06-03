@@ -204,6 +204,15 @@ index.html:
 
 **Ветка:** `claude/vigilant-carson-5H3xX`
 
+### Сессия 2026-06-03 — авто-завершение забытых операций
+
+**Добавлено в `server.js`:**
+- `autoCloseActiveSessions(label)` — находит все активные/paused сессии и закрывает каждую:
+  вставляет `END_OP_SESSION` в journal + UPDATE `status='finished'`, `is_active=0`, `end_time=now`
+- `setInterval` каждые 60 сек проверяет время; срабатывает в **14:30** и **22:30** (конец смен)
+- Guard `lastAutoCloseKey` — защита от двойного срабатывания в одну минуту
+- Запись в `logs` с типом `AUTO_CLOSE` для аудита
+
 ## Известные особенности / осторожно
 
 - **Routes после `app.listen()`** — в `server.js` часть маршрутов регистрируется после вызова `app.listen()`. Работает, но технически антипаттерн.
