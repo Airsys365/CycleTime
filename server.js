@@ -304,6 +304,7 @@ app.post('/api/log', (req, res) => {
       const rawSerial = parsed.sn || parsed.serial_number || null;
 	  const serial = normalizeSN(rawSerial);
 
+      console.log('[COUNT_ITEM] storing:', { operator: entry.operator, operation_id: entry.operation_id, wo: entry.wo, serial });
       db.run(`
         INSERT INTO journal (
           timestamp, operator_id, operation_id, event_type,
@@ -317,7 +318,11 @@ app.post('/api/log', (req, res) => {
         parsed.item_count || 1,
         entry.wo,
         serial
-      ]);
+      ],
+      function(err) {
+        if (err) console.error('[COUNT_ITEM] INSERT failed:', err.message, { operator: entry.operator, operation_id: entry.operation_id, wo: entry.wo });
+        else console.log('[COUNT_ITEM] INSERT ok, rowid:', this.lastID, 'operator:', entry.operator);
+      });
       break;
     }
 
@@ -391,6 +396,30 @@ app.get('/api/logs', (req, res) => {
       res.json(rows);
     }
   });
+});
+
+// Diagnostic: all journal entries for a specific operator
+app.get('/api/debug/operator/:id', (req, res) => {
+  const opId = req.params.id;
+  db.all(
+    `SELECT event_type, COUNT(*) as cnt, date(timestamp) as day
+     FROM journal WHERE operator_id = ?
+     GROUP BY event_type, date(timestamp)
+     ORDER BY day DESC, event_type`,
+    [opId],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      db.all(
+        `SELECT journal_id, timestamp, event_type, operation_id, work_order_id, serial_number, item_count, status, is_active
+         FROM journal WHERE operator_id = ? ORDER BY journal_id DESC LIMIT 20`,
+        [opId],
+        (err2, recent) => {
+          if (err2) return res.status(500).json({ error: err2.message });
+          res.json({ operator_id: opId, summary: rows, recent_rows: recent });
+        }
+      );
+    }
+  );
 });
 
 
