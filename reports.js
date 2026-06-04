@@ -886,6 +886,7 @@ module.exports = (db) => {
                     AND sw.start_jid > 0
                     AND j.journal_id  >= sw.start_jid
                     AND j.journal_id  <= sw.end_jid
+                    AND date(j.timestamp) = date('now')
                 GROUP BY sw.end_jid
             )
             SELECT
