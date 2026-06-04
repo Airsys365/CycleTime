@@ -833,104 +833,117 @@ module.exports = (db) => {
 		}
 	});
 	// --- 📊 Операции за день (ФИНАЛЬНЫЙ ИСПРАВЛЕННЫЙ) ---
-    router.get('/operations_daily', (req, res) => {
-        const sql = `
-            WITH end_events AS (
-                SELECT journal_id AS end_jid, operator_id, operation_id, work_order_id
-                FROM journal
-                WHERE event_type = 'END_OP_SESSION'
-                  AND date(timestamp) = date('now')
-            ),
-            session_starts AS (
-                SELECT
-                    e.end_jid, e.operator_id, e.operation_id, e.work_order_id,
-                    COALESCE(
-                        (SELECT MAX(s.journal_id) FROM journal s
-                         WHERE s.operator_id  = e.operator_id
-                           AND s.operation_id = e.operation_id
-                           AND s.work_order_id = e.work_order_id
-                           AND s.event_type   = 'START_OP'
-                           AND s.journal_id   < e.end_jid),
-                        0
-                    ) AS start_jid
-                FROM end_events e
-            ),
-            item_counts AS (
-                SELECT sw.end_jid,
-                       COUNT(j.journal_id) AS total_count
-                FROM session_starts sw
-                LEFT JOIN journal j
-                    ON  j.operator_id  = sw.operator_id
-                    AND j.operation_id = sw.operation_id
-                    AND j.work_order_id = sw.work_order_id
-                    AND j.event_type   = 'COUNT_ITEM'
-                    AND j.journal_id   > sw.start_jid
-                    AND j.journal_id   < sw.end_jid
-                GROUP BY sw.end_jid
-            ),
-            session_active AS (
-                SELECT sw.end_jid,
-                       SUM(CASE
-                           WHEN j.event_type IN ('PAUSE_OP','END_OP_SESSION','FINISH_OP')
-                               THEN CAST(strftime('%s', j.timestamp) AS INTEGER)
-                           WHEN j.event_type IN ('START_OP','RESUME_OP')
-                               THEN -CAST(strftime('%s', j.timestamp) AS INTEGER)
-                           ELSE 0
-                       END) AS active_sec
-                FROM session_starts sw
-                JOIN journal j
-                    ON  j.operator_id  = sw.operator_id
-                    AND j.operation_id = sw.operation_id
-                    AND j.work_order_id = sw.work_order_id
-                    AND j.event_type IN ('START_OP','PAUSE_OP','RESUME_OP','END_OP_SESSION','FINISH_OP')
-                    AND sw.start_jid > 0
-                    AND j.journal_id  >= sw.start_jid
-                    AND j.journal_id  <= sw.end_jid
-                    AND date(j.timestamp) = date('now')
-                GROUP BY sw.end_jid
-            )
-            SELECT
-                sw.operator_id,
-                oper.operator_name,
-                sw.operation_id,
-                TRIM(o.operation_name) AS operation_name,
-                sw.work_order_id,
-                o.product_name,
-                COALESCE(ic.total_count, 0) AS total_count,
-                CASE
-                    WHEN COALESCE(ic.total_count, 0) > 0 AND COALESCE(sa.active_sec, 0) > 0
-                    THEN ROUND(CAST(sa.active_sec AS REAL) / ic.total_count / 60.0, 1)
-                    ELSE NULL
-                END AS cycle_minutes,
-                ROUND(o.standard_cycle_time / 60.0, 1) AS planned_cycle_minutes,
-                CASE
-                    WHEN o.standard_cycle_time IS NULL OR COALESCE(ic.total_count, 0) = 0
-                         OR COALESCE(sa.active_sec, 0) = 0 THEN NULL
-                    WHEN ROUND(CAST(sa.active_sec AS REAL) / ic.total_count / 60.0, 1)
-                         <= ROUND(o.standard_cycle_time/60.0,1) THEN 'ok'
-                    WHEN ROUND(CAST(sa.active_sec AS REAL) / ic.total_count / 60.0, 1)
-                         <= ROUND(o.standard_cycle_time/60.0,1) * 1.2 THEN 'warning'
-                    ELSE 'bad'
-                END AS cycle_status
-            FROM session_starts sw
-            LEFT JOIN item_counts   ic   ON ic.end_jid      = sw.end_jid
-            LEFT JOIN session_active sa  ON sa.end_jid      = sw.end_jid
-            LEFT JOIN operations     o   ON o.operation_id  = sw.operation_id
-            LEFT JOIN operators      oper ON TRIM(oper.operator_id) = TRIM(sw.operator_id)
-            ORDER BY sw.end_jid DESC
-        `;
-
-        db.all(sql, [], (err, rows) => {
-            if (err) {
-                console.error('[operations_daily ERROR]', err.message);
-                return res.status(500).json({ error: err.message });
-            }
-            res.json({
-                status: 'ok',
-                date: new Date().toISOString().slice(0, 10),
-                data: rows
+    router.get('/operations_daily', async (req, res) => {
+        try {
+            // Each END_OP_SESSION today = one row
+            const endEvents = await new Promise((resolve, reject) => {
+                db.all(`
+                    SELECT journal_id AS end_jid, operator_id, operation_id, work_order_id
+                    FROM journal
+                    WHERE event_type = 'END_OP_SESSION'
+                      AND date(timestamp) = date('now')
+                    ORDER BY journal_id DESC
+                `, [], (err, rows) => err ? reject(err) : resolve(rows || []));
             });
-        });
+
+            const results = [];
+
+            for (const e of endEvents) {
+                // Find the preceding START_OP to define session window
+                const startRow = await new Promise((resolve) => {
+                    db.get(`
+                        SELECT journal_id AS start_jid FROM journal
+                        WHERE operator_id = ? AND operation_id = ? AND work_order_id = ?
+                          AND event_type = 'START_OP' AND journal_id < ?
+                        ORDER BY journal_id DESC LIMIT 1
+                    `, [e.operator_id, e.operation_id, e.work_order_id, e.end_jid],
+                    (err, row) => resolve(row || null));
+                });
+                const startJid = startRow ? startRow.start_jid : 0;
+
+                // Count items in session window
+                const itemRow = await new Promise((resolve) => {
+                    db.get(`
+                        SELECT COUNT(*) AS cnt FROM journal
+                        WHERE operator_id = ? AND operation_id = ? AND work_order_id = ?
+                          AND event_type = 'COUNT_ITEM'
+                          AND journal_id > ? AND journal_id < ?
+                    `, [e.operator_id, e.operation_id, e.work_order_id, startJid, e.end_jid],
+                    (err, row) => resolve(row || { cnt: 0 }));
+                });
+                const itemCount = itemRow.cnt || 0;
+
+                // Calculate active time via event walk-through (no sign-sum issues)
+                let cycleMins = null;
+                if (startJid > 0 && itemCount > 0) {
+                    const events = await new Promise((resolve) => {
+                        db.all(`
+                            SELECT timestamp, event_type FROM journal
+                            WHERE operator_id = ? AND operation_id = ? AND work_order_id = ?
+                              AND event_type IN ('START_OP','PAUSE_OP','RESUME_OP','END_OP_SESSION','FINISH_OP')
+                              AND journal_id >= ? AND journal_id <= ?
+                            ORDER BY journal_id ASC
+                        `, [e.operator_id, e.operation_id, e.work_order_id, startJid, e.end_jid],
+                        (err, rows) => resolve(rows || []));
+                    });
+
+                    let totalSec = 0;
+                    let workStart = null;
+                    for (const ev of events) {
+                        const ts = new Date(ev.timestamp).getTime();
+                        if (ev.event_type === 'START_OP' || ev.event_type === 'RESUME_OP') {
+                            workStart = ts;
+                        } else if (ev.event_type === 'PAUSE_OP' || ev.event_type === 'END_OP_SESSION' || ev.event_type === 'FINISH_OP') {
+                            if (workStart !== null) {
+                                totalSec += (ts - workStart) / 1000;
+                                workStart = null;
+                            }
+                        }
+                    }
+                    if (totalSec > 0) {
+                        cycleMins = Math.round(totalSec / itemCount / 60 * 10) / 10;
+                    }
+                }
+
+                // Operator + operation metadata
+                const meta = await new Promise((resolve) => {
+                    db.get(`
+                        SELECT o.operation_name, o.product_name, o.standard_cycle_time,
+                               op.operator_name
+                        FROM operations o
+                        LEFT JOIN operators op ON TRIM(op.operator_id) = TRIM(?)
+                        WHERE o.operation_id = ?
+                    `, [e.operator_id, e.operation_id],
+                    (err, row) => resolve(row || {}));
+                });
+
+                const planned = meta.standard_cycle_time ? meta.standard_cycle_time / 60 : null;
+                let cycleStatus = null;
+                if (cycleMins !== null && planned !== null) {
+                    if (cycleMins <= planned) cycleStatus = 'ok';
+                    else if (cycleMins <= planned * 1.2) cycleStatus = 'warning';
+                    else cycleStatus = 'bad';
+                }
+
+                results.push({
+                    operator_id:           e.operator_id,
+                    operator_name:         meta.operator_name || null,
+                    operation_id:          e.operation_id,
+                    operation_name:        (meta.operation_name || '').trim() || e.operation_id,
+                    work_order_id:         e.work_order_id,
+                    product_name:          meta.product_name || null,
+                    total_count:           itemCount,
+                    cycle_minutes:         cycleMins,
+                    planned_cycle_minutes: planned !== null ? Math.round(planned * 10) / 10 : null,
+                    cycle_status:          cycleStatus
+                });
+            }
+
+            res.json({ status: 'ok', date: new Date().toISOString().slice(0, 10), data: results });
+        } catch (err) {
+            console.error('[operations_daily ERROR]', err.message);
+            res.status(500).json({ error: err.message });
+        }
     });
 
     // --- 📅 Операции за неделю (с понедельника, группировка по операции+продукту) ---
