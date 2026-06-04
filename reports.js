@@ -930,6 +930,7 @@ module.exports = (db) => {
                 FROM journal j
                 JOIN finished_week f ON f.operation_id = j.operation_id AND f.work_order_id = j.work_order_id
                 WHERE j.event_type = 'COUNT_ITEM'
+                  AND j.timestamp >= ?
                 GROUP BY j.operation_id, j.work_order_id
             ),
             active_time AS (
@@ -943,6 +944,7 @@ module.exports = (db) => {
                        END) AS active_sec
                 FROM journal j
                 JOIN finished_week f ON f.operation_id = j.operation_id AND f.work_order_id = j.work_order_id
+                WHERE j.timestamp >= ?
                 GROUP BY j.operation_id, j.work_order_id
             )
             SELECT
@@ -967,7 +969,7 @@ module.exports = (db) => {
             ORDER BY total_count DESC
         `;
 
-        db.all(sql, [mondayStr], (err, rows) => {
+        db.all(sql, [mondayStr, mondayStr, mondayStr], (err, rows) => {
             if (err) {
                 console.error('[operations_weekly ERROR]', err.message);
                 return res.status(500).json({ error: err.message });
