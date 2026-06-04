@@ -832,80 +832,32 @@ module.exports = (db) => {
 			return res.status(500).json({ status: "error", error: err.message });
 		}
 	});
-	// --- 📊 Операции за день (ФИНАЛЬНЫЙ ИСПРАВЛЕННЫЙ) ---
+	// --- 📊 Операции за день ---
     router.get('/operations_daily', async (req, res) => {
         try {
-            // Each END_OP_SESSION today = one row
-            const endEvents = await new Promise((resolve, reject) => {
+            // One row per (operator+op+WO) where the last event today has status='finished'
+            const finished = await new Promise((resolve, reject) => {
                 db.all(`
-                    SELECT journal_id AS end_jid, operator_id, operation_id, work_order_id
-                    FROM journal
-                    WHERE event_type = 'END_OP_SESSION'
-                      AND date(timestamp) = date('now')
-                    ORDER BY journal_id DESC
+                    WITH last_status AS (
+                        SELECT operation_id, work_order_id, operator_id, status,
+                               ROW_NUMBER() OVER (PARTITION BY operation_id, work_order_id, operator_id ORDER BY journal_id DESC) AS rn
+                        FROM journal WHERE date(timestamp) = date('now')
+                    )
+                    SELECT operation_id, work_order_id, operator_id
+                    FROM last_status WHERE rn = 1 AND status = 'finished'
                 `, [], (err, rows) => err ? reject(err) : resolve(rows || []));
             });
 
             const results = [];
 
-            for (const e of endEvents) {
-                // Find the preceding START_OP to define session window
-                const startRow = await new Promise((resolve) => {
-                    db.get(`
-                        SELECT journal_id AS start_jid FROM journal
-                        WHERE operator_id = ? AND operation_id = ? AND work_order_id = ?
-                          AND event_type = 'START_OP' AND journal_id < ?
-                        ORDER BY journal_id DESC LIMIT 1
-                    `, [e.operator_id, e.operation_id, e.work_order_id, e.end_jid],
-                    (err, row) => resolve(row || null));
-                });
-                const startJid = startRow ? startRow.start_jid : 0;
+            for (const f of finished) {
+                const totalItems = await calculateTotalItems(f.operator_id, f.operation_id, f.work_order_id);
+                const totalActiveSeconds = await calculateTotalActiveSeconds(f.operator_id, f.operation_id, f.work_order_id);
 
-                // Count items in session window
-                const itemRow = await new Promise((resolve) => {
-                    db.get(`
-                        SELECT COUNT(*) AS cnt FROM journal
-                        WHERE operator_id = ? AND operation_id = ? AND work_order_id = ?
-                          AND event_type = 'COUNT_ITEM'
-                          AND journal_id > ? AND journal_id < ?
-                    `, [e.operator_id, e.operation_id, e.work_order_id, startJid, e.end_jid],
-                    (err, row) => resolve(row || { cnt: 0 }));
-                });
-                const itemCount = itemRow.cnt || 0;
+                const cycleMin = (totalItems > 0 && totalActiveSeconds > 0)
+                    ? (totalActiveSeconds / totalItems) / 60
+                    : 0;
 
-                // Calculate active time via event walk-through (no sign-sum issues)
-                let cycleMins = null;
-                if (startJid > 0 && itemCount > 0) {
-                    const events = await new Promise((resolve) => {
-                        db.all(`
-                            SELECT timestamp, event_type FROM journal
-                            WHERE operator_id = ? AND operation_id = ? AND work_order_id = ?
-                              AND event_type IN ('START_OP','PAUSE_OP','RESUME_OP','END_OP_SESSION','FINISH_OP')
-                              AND journal_id >= ? AND journal_id <= ?
-                            ORDER BY journal_id ASC
-                        `, [e.operator_id, e.operation_id, e.work_order_id, startJid, e.end_jid],
-                        (err, rows) => resolve(rows || []));
-                    });
-
-                    let totalSec = 0;
-                    let workStart = null;
-                    for (const ev of events) {
-                        const ts = new Date(ev.timestamp).getTime();
-                        if (ev.event_type === 'START_OP' || ev.event_type === 'RESUME_OP') {
-                            workStart = ts;
-                        } else if (ev.event_type === 'PAUSE_OP' || ev.event_type === 'END_OP_SESSION' || ev.event_type === 'FINISH_OP') {
-                            if (workStart !== null) {
-                                totalSec += (ts - workStart) / 1000;
-                                workStart = null;
-                            }
-                        }
-                    }
-                    if (totalSec > 0) {
-                        cycleMins = Math.round(totalSec / itemCount / 60 * 10) / 10;
-                    }
-                }
-
-                // Operator + operation metadata
                 const meta = await new Promise((resolve) => {
                     db.get(`
                         SELECT o.operation_name, o.product_name, o.standard_cycle_time,
@@ -913,11 +865,12 @@ module.exports = (db) => {
                         FROM operations o
                         LEFT JOIN operators op ON TRIM(op.operator_id) = TRIM(?)
                         WHERE o.operation_id = ?
-                    `, [e.operator_id, e.operation_id],
+                    `, [f.operator_id, f.operation_id],
                     (err, row) => resolve(row || {}));
                 });
 
                 const planned = meta.standard_cycle_time ? meta.standard_cycle_time / 60 : null;
+                const cycleMins = cycleMin > 0 ? Number(cycleMin.toFixed(2)) : null;
                 let cycleStatus = null;
                 if (cycleMins !== null && planned !== null) {
                     if (cycleMins <= planned) cycleStatus = 'ok';
@@ -926,20 +879,26 @@ module.exports = (db) => {
                 }
 
                 results.push({
-                    operator_id:           e.operator_id,
-                    operator_name:         meta.operator_name || null,
-                    operation_id:          e.operation_id,
-                    operation_name:        (meta.operation_name || '').trim() || e.operation_id,
-                    work_order_id:         e.work_order_id,
-                    product_name:          meta.product_name || null,
-                    total_count:           itemCount,
-                    cycle_minutes:         cycleMins,
+                    operator_id: f.operator_id,
+                    operator_name: meta.operator_name || null,
+                    operation_id: f.operation_id,
+                    operation_name: (meta.operation_name || '').trim() || f.operation_id,
+                    work_order_id: f.work_order_id,
+                    product_name: meta.product_name || null,
+                    total_count: totalItems,
+                    cycle_minutes: cycleMins,
                     planned_cycle_minutes: planned !== null ? Math.round(planned * 10) / 10 : null,
-                    cycle_status:          cycleStatus
+                    cycle_status: cycleStatus,
+                    active_seconds: totalActiveSeconds
                 });
             }
 
-            res.json({ status: 'ok', date: new Date().toISOString().slice(0, 10), data: results });
+            res.json({
+                status: 'ok',
+                date: new Date().toISOString().slice(0, 10),
+                data: results
+            });
+
         } catch (err) {
             console.error('[operations_daily ERROR]', err.message);
             res.status(500).json({ error: err.message });
