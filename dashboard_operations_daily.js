@@ -77,7 +77,7 @@ function renderOperationsDailyTable(data) {
     return `
 	  <tr style="border-bottom: 1px solid #333;">
 		<td style="padding: 8px;">
-		  ${row.operator_name || '—'}
+		  ${row.operator_name || row.operator_id || '—'}
 		</td>
 		<td style="padding: 8px; font-weight: bold;">
 		  ${row.operation_name || row.operation_id || '—'}
