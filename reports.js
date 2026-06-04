@@ -855,12 +855,9 @@ module.exports = (db) => {
                     ) AS start_jid
                 FROM end_events e
             ),
-            item_stats AS (
-                SELECT
-                    sw.end_jid,
-                    COUNT(j.journal_id) AS total_count,
-                    MIN(j.timestamp)    AS first_scan,
-                    MAX(j.timestamp)    AS last_scan
+            item_counts AS (
+                SELECT sw.end_jid,
+                       COUNT(j.journal_id) AS total_count
                 FROM session_starts sw
                 LEFT JOIN journal j
                     ON  j.operator_id  = sw.operator_id
@@ -869,6 +866,26 @@ module.exports = (db) => {
                     AND j.event_type   = 'COUNT_ITEM'
                     AND j.journal_id   > sw.start_jid
                     AND j.journal_id   < sw.end_jid
+                GROUP BY sw.end_jid
+            ),
+            session_active AS (
+                SELECT sw.end_jid,
+                       SUM(CASE
+                           WHEN j.event_type IN ('PAUSE_OP','END_OP_SESSION','FINISH_OP')
+                               THEN CAST(strftime('%s', j.timestamp) AS INTEGER)
+                           WHEN j.event_type IN ('START_OP','RESUME_OP')
+                               THEN -CAST(strftime('%s', j.timestamp) AS INTEGER)
+                           ELSE 0
+                       END) AS active_sec
+                FROM session_starts sw
+                JOIN journal j
+                    ON  j.operator_id  = sw.operator_id
+                    AND j.operation_id = sw.operation_id
+                    AND j.work_order_id = sw.work_order_id
+                    AND j.event_type IN ('START_OP','PAUSE_OP','RESUME_OP','END_OP_SESSION','FINISH_OP')
+                    AND sw.start_jid > 0
+                    AND j.journal_id  >= sw.start_jid
+                    AND j.journal_id  <= sw.end_jid
                 GROUP BY sw.end_jid
             )
             SELECT
@@ -879,25 +896,26 @@ module.exports = (db) => {
                 sw.work_order_id,
                 o.product_name,
                 COALESCE(ic.total_count, 0) AS total_count,
-                CASE WHEN COALESCE(ic.total_count, 0) > 1
-                    THEN ROUND(
-                        (JULIANDAY(ic.last_scan) - JULIANDAY(ic.first_scan)) * 1440.0
-                        / NULLIF(ic.total_count - 1, 0), 1)
+                CASE
+                    WHEN COALESCE(ic.total_count, 0) > 0 AND COALESCE(sa.active_sec, 0) > 0
+                    THEN ROUND(CAST(sa.active_sec AS REAL) / ic.total_count / 60.0, 1)
                     ELSE NULL
                 END AS cycle_minutes,
                 ROUND(o.standard_cycle_time / 60.0, 1) AS planned_cycle_minutes,
                 CASE
-                    WHEN o.standard_cycle_time IS NULL OR COALESCE(ic.total_count, 0) <= 1 THEN NULL
-                    WHEN ROUND((JULIANDAY(ic.last_scan)-JULIANDAY(ic.first_scan))*1440.0/NULLIF(ic.total_count-1,0),1)
+                    WHEN o.standard_cycle_time IS NULL OR COALESCE(ic.total_count, 0) = 0
+                         OR COALESCE(sa.active_sec, 0) = 0 THEN NULL
+                    WHEN ROUND(CAST(sa.active_sec AS REAL) / ic.total_count / 60.0, 1)
                          <= ROUND(o.standard_cycle_time/60.0,1) THEN 'ok'
-                    WHEN ROUND((JULIANDAY(ic.last_scan)-JULIANDAY(ic.first_scan))*1440.0/NULLIF(ic.total_count-1,0),1)
+                    WHEN ROUND(CAST(sa.active_sec AS REAL) / ic.total_count / 60.0, 1)
                          <= ROUND(o.standard_cycle_time/60.0,1) * 1.2 THEN 'warning'
                     ELSE 'bad'
                 END AS cycle_status
             FROM session_starts sw
-            LEFT JOIN item_stats ic   ON ic.end_jid      = sw.end_jid
-            LEFT JOIN operations o    ON o.operation_id  = sw.operation_id
-            LEFT JOIN operators  oper ON TRIM(oper.operator_id) = TRIM(sw.operator_id)
+            LEFT JOIN item_counts   ic   ON ic.end_jid      = sw.end_jid
+            LEFT JOIN session_active sa  ON sa.end_jid      = sw.end_jid
+            LEFT JOIN operations     o   ON o.operation_id  = sw.operation_id
+            LEFT JOIN operators      oper ON TRIM(oper.operator_id) = TRIM(sw.operator_id)
             ORDER BY sw.end_jid DESC
         `;
 
