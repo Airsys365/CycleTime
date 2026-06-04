@@ -897,16 +897,14 @@ module.exports = (db) => {
                 o.product_name,
                 COALESCE(ic.total_count, 0) AS total_count,
                 CASE
-                    WHEN COALESCE(ic.total_count, 0) > 0
-                         AND COALESCE(sa.active_sec, 0) > 0
-                         AND sa.active_sec <= 43200
+                    WHEN COALESCE(ic.total_count, 0) > 0 AND COALESCE(sa.active_sec, 0) > 0
                     THEN ROUND(CAST(sa.active_sec AS REAL) / ic.total_count / 60.0, 1)
                     ELSE NULL
                 END AS cycle_minutes,
                 ROUND(o.standard_cycle_time / 60.0, 1) AS planned_cycle_minutes,
                 CASE
                     WHEN o.standard_cycle_time IS NULL OR COALESCE(ic.total_count, 0) = 0
-                         OR COALESCE(sa.active_sec, 0) = 0 OR sa.active_sec > 43200 THEN NULL
+                         OR COALESCE(sa.active_sec, 0) = 0 THEN NULL
                     WHEN ROUND(CAST(sa.active_sec AS REAL) / ic.total_count / 60.0, 1)
                          <= ROUND(o.standard_cycle_time/60.0,1) THEN 'ok'
                     WHEN ROUND(CAST(sa.active_sec AS REAL) / ic.total_count / 60.0, 1)
