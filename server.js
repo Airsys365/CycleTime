@@ -1466,7 +1466,7 @@ app.get('/api/reports/operations_daily', (req, res) => {
     FROM session_starts sw
     LEFT JOIN item_stats ic    ON ic.end_jid      = sw.end_jid
     LEFT JOIN operations o     ON o.operation_id  = sw.operation_id
-    LEFT JOIN operators  oper  ON oper.operator_id = sw.operator_id
+    LEFT JOIN operators  oper  ON TRIM(oper.operator_id) = TRIM(sw.operator_id)
     ORDER BY sw.end_jid DESC
   `;
 
