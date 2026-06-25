@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const db = new sqlite3.Database(
-  path.join(__dirname, 'database.sqlite')
+  process.env.DB_PATH || path.join(__dirname, 'database.sqlite')
 );
 app.use(express.json());
 const fs = require('fs');
@@ -381,7 +381,7 @@ app.post('/api/check_serial_duplicate', (req, res) => {
         AND serial_number = ?
       LIMIT 1
     `,
-    [operator_id, operation_id, work_order_id, serial_number],
+    [operator_id, operation_id, work_order_id, serial],
     (err, row) => {
       if (err) {
         console.error('❌ Error in /api/check_serial_duplicate:', err);
@@ -1052,9 +1052,11 @@ db.serialize(() => {
     console.log("⚡ Индексы оптимизированы. Скорость поиска увеличена.");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+  });
+}
 
 // --- Авто-завершение забытых операций в конце смены (14:30 и 22:30) ---
 function autoCloseActiveSessions(label) {
@@ -1086,7 +1088,7 @@ function autoCloseActiveSessions(label) {
 }
 
 let lastAutoCloseKey = null;
-setInterval(() => {
+const autoCloseInterval = setInterval(() => {
   const now = new Date();
   const hh = now.getHours();
   const mm = now.getMinutes();
@@ -1096,7 +1098,9 @@ setInterval(() => {
   if (lastAutoCloseKey === key) return;
   lastAutoCloseKey = key;
   autoCloseActiveSessions(`shift_end_${hh}:${mm}`);
-}, 60 * 1000);
+}, 60 * 1000).unref();
+
+module.exports = { app, db };
 
 // --- API для продуктов ---
 app.get('/api/products', (req, res) => {
@@ -1208,8 +1212,8 @@ app.post('/api/check_paused_status', (req, res) => {
         console.error('Ошибка проверки статуса:', err);
         res.json({ is_paused: false });
       } else {
-        res.json({ 
-          is_paused: row && row.status === 'paused' 
+        res.json({
+          is_paused: !!(row && row.status === 'paused')
         });
       }
     }
