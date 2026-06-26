@@ -19,22 +19,30 @@ module.exports = (db) => {
     });
 
     // 1. Production Plan (Filters: wo, product)
+    // Дата-фильтр определяет какие WO показать (были активны в периоде).
+    // actual_total — итого за весь срок WO, не только за выбранный период.
     router.get('/production_plan', async (req, res) => {
         const { start_date, end_date, wo, product } = req.query;
         let params = [start_date, end_date];
-        let filter = "";
-        if (wo)      { filter += " AND p.work_order_id LIKE ?"; params.push(`%${wo}%`); }
-        if (product) { filter += " AND p.product_name LIKE ?";  params.push(`%${product}%`); }
+        let planFilter = "";
+        if (wo)      { planFilter += " AND p.work_order_id LIKE ?"; params.push(`%${wo}%`); }
+        if (product) { planFilter += " AND p.product_name LIKE ?";  params.push(`%${product}%`); }
 
         const sql = `
             SELECT p.work_order_id, p.product_name, p.planned_total,
-                   SUM(COALESCE(j.item_count, 0)) as actual_total
+                   (SELECT SUM(COALESCE(j2.item_count, 0))
+                    FROM journal j2
+                    WHERE j2.work_order_id = p.work_order_id
+                      AND j2.event_type = 'COUNT_ITEM') AS actual_total
             FROM work_orders_plan p
-            LEFT JOIN journal j ON p.work_order_id = j.work_order_id
-                               AND j.event_type = 'COUNT_ITEM'
-            WHERE date(j.timestamp) BETWEEN ? AND ? ${filter}
-            GROUP BY p.work_order_id
-            HAVING actual_total > 0 OR p.planned_total > 0
+            WHERE EXISTS (
+                SELECT 1 FROM journal j
+                WHERE j.work_order_id = p.work_order_id
+                  AND j.event_type = 'COUNT_ITEM'
+                  AND date(j.timestamp) BETWEEN ? AND ?
+            )
+            ${planFilter}
+            ORDER BY p.work_order_id
             LIMIT 15`;
         try { res.json({ status: "ok", data: await query(sql, params) }); }
         catch (e) { res.status(500).json({ error: e.message }); }
