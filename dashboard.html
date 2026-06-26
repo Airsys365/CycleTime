@@ -56,7 +56,12 @@
 	</div>
 	
 
-	<h2 style="margin-top:40px;">📊 Downtime Statistics</h2>
+  <h2 style="margin-top:40px;">📦 Work Orders Progress</h2>
+  <div id="orders-plan-list"
+       style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:15px;">
+  </div>
+
+  <h2 style="margin-top:40px;">📊 Downtime Statistics</h2>
 	<div id="downtime-chart-container" style="background:#1a1a1a; padding:20px; border-radius:10px;">
 	  <canvas id="downtimeChart" width="400" height="200"></canvas>
 	</div>
@@ -73,7 +78,8 @@
 		 style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
 	</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/js/dashboard/dashboard_orders.js"></script>
 	<script src="/js/dashboard/dashboard_operations_weekly.js"></script>
 	<script src="/js/dashboard/defects_dashboard.js"></script>	
 	<script src="/js/dashboard/dashboard_operations_daily.js"></script>	
